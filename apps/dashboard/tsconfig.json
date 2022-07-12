@@ -10,7 +10,6 @@
     "declarationMap": true,
     "incremental": true,
     "outDir": "./dist",
-
   },
   "include": [
     "src"
