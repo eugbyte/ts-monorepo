@@ -1,14 +1,16 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
+    plugins: ['@typescript-eslint'],
     parserOptions: {
       tsconfigRootDir: __dirname,
-      project: ['./apps/*/tsconfig.json', './libs/*/tsconfig.json'],
+      project: ['tsconfig.base.json', 'apps/*/tsconfig.json', 'libs/*/tsconfig.json'],
     },
-    plugins: ['@typescript-eslint'],
     extends: [
       'eslint:recommended',
       'plugin:@typescript-eslint/recommended',
       'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      'prettier',
     ],
-  };
+    ignorePatterns: [".eslintrc.js", "craco.config.js", "reportWebVitals.ts"]
+};
