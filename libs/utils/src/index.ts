@@ -1,1 +1,1 @@
-export {greet} from "./log/log";
+export {greet} from "./log";
