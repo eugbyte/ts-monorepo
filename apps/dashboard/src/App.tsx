@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import {Button} from "@browser-notify-ui/components";
 import {greet} from "@browser-notify-ui/utils";
+import {DashBoard} from "~/components/dashboard";
 
 function App() {
   greet();
