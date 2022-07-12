@@ -23,6 +23,7 @@ function App() {
           Learn React
         </a>
         <Button />
+        <DashBoard />
       </header>
     </div>
   );
