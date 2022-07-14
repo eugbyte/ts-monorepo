@@ -5,7 +5,12 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    "lib": ["es2019", "es6", "dom", "webworker"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "WebWorker"
+    ],
     "allowJs": true,
     "composite": true,
     "declaration": true,

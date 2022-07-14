@@ -1,4 +1,4 @@
-import {generateVapidKey} from "./auth";
+import {generateVapidPublicKey} from "./auth";
 import axios, { AxiosResponse } from "axios";
 
 export const register = async(): Promise<ServiceWorkerRegistration> => {
@@ -9,7 +9,9 @@ export const register = async(): Promise<ServiceWorkerRegistration> => {
         // Push isn't supported on this browser, disable or hide UI.
         throw new Error("window does not have PushManager");
       }
-    return navigator.serviceWorker.register('./sw.js', {
+
+    // note it is .js instead of .ts as the .ts files will be compiled to .js files during build
+    return navigator.serviceWorker.register('./service-worker.js', {
         scope: '/',
     });
 }
@@ -42,8 +44,6 @@ export const getPermission = async() => {
     }
 }
 
-
-
 export const subscribe = async(message: string): Promise<AxiosResponse<any, any>> => {
     if (!('serviceWorker' in navigator)) {
         throw new Error("navigator does not have service worker");
@@ -52,7 +52,7 @@ export const subscribe = async(message: string): Promise<AxiosResponse<any, any>
     const registration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
     const subscription: PushSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: generateVapidKey()
+        applicationServerKey: generateVapidPublicKey()
     });
 
     const json = subscription.toJSON();
