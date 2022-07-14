@@ -1,5 +1,5 @@
 {
-  "name": "@browser-notify-ui/pwa",
+  "name": "@browser-notify-ui/dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

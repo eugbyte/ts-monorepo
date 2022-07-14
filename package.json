@@ -10,7 +10,7 @@
   "author": "eugbyte",
   "license": "ISC",
   "workspaces": [
-    "apps/pwa/**",
+    "apps/dashboard/**",
     "libs/components/**",
     "libs/utils/**",
     "libs/service-workers/**"
