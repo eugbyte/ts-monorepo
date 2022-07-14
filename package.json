@@ -12,7 +12,8 @@
   "workspaces": [
     "apps/dashboard/**",
     "libs/components/**",
-    "libs/utils/**"
+    "libs/utils/**",
+    "libs/service-workers/**"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.6",

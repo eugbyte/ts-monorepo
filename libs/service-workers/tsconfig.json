@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "lib": ["es2019", "es6", "dom", "webworker"],
+    "allowJs": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "./dist",
+  },
+  "include": [
+    "src"
+  ],
+  // "exclude": ["src/notification/sw.ts"]
+}
