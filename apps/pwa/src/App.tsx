@@ -1,12 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Button} from "@browser-notify-ui/components";
-import {greet} from "@browser-notify-ui/utils";
-import {DashBoard} from "~/components/dashboard";
 
 function App() {
-  greet();
   return (
     <div className="App">
       <header className="App-header">
@@ -22,8 +18,6 @@ function App() {
         >
           Learn React
         </a>
-        <Button />
-        <DashBoard />
       </header>
     </div>
   );

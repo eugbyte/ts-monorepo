@@ -31,7 +31,7 @@ export const getPermission = async() => {
         throw new Error("window does not have Notification");
     }
     if (!checkNotificationPromise()) {
-        Notification.requestPermission((permission) => {
+        Notification.requestPermission((permission: NotificationPermission) => {
             if (permission !== "granted") {
                 throw new Error("permission not granted")
             }
