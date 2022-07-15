@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {Button} from "@browser-notify-ui/components";
 
 function App() {
+  useEffect(() => {
+
+  });
   return (
     <div className="App">
       <header className="App-header">
@@ -21,6 +25,7 @@ function App() {
         <h1 className="text-3xl font-bold underline">
           Hello world!
         </h1>
+        <Button />
       </header>
     </div>
   );
