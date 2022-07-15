@@ -2,7 +2,7 @@ import {generateVapidPublicKey} from "./auth";
 import axios, { AxiosResponse } from "axios";
 
 // the downside is that the API for getting permission recently changed from taking a callback to returning a Promise
-const checkNotificationPromise = (): boolean => {
+const checkNotifyPromiseBrowserSupport = (): boolean => {
     try {
         Notification.requestPermission().then();
       } catch(e) {
@@ -14,20 +14,21 @@ const checkNotificationPromise = (): boolean => {
 // get permission from user for push notification
 export const getPermission = async() => {
     if (!('Notification' in window)) {
-        throw new Error("window does not have Notification");
+        return false;
     }
-    if (!checkNotificationPromise()) {
-        Notification.requestPermission((permission: NotificationPermission) => {
-            if (permission !== "granted") {
-                throw new Error("permission not granted")
-            }
+
+    let result = false;
+    if (!checkNotifyPromiseBrowserSupport()) {
+        await Notification.requestPermission((permission: NotificationPermission) => {
+            result = permission === "granted";
+            console.log({permission});
         })
-        throw new Error("promise version of Notification permission not supported");
+        return result;
     }
     const permission: NotificationPermission = await Notification.requestPermission();
-    if (permission !== "granted") {
-        throw new Error("permission not granted")
-    }
+    console.log({permission});
+    result = permission === "granted";
+    return result;
 }
 
 export const subscribe = async(message: string): Promise<AxiosResponse<any, any>> => {

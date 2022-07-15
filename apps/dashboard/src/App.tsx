@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Button} from "@browser-notify-ui/components";
+import { Button } from "@browser-notify-ui/components";
+import { getPermission } from '@browser-notify-ui/service-workers';
 
 function App() {
   useEffect(() => {
-
+    getPermission();
   });
   return (
     <div className="App">
