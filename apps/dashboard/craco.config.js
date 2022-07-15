@@ -1,9 +1,9 @@
 const path = require("path");
 const { getLoader, loaderByName } = require("@craco/craco");
-
 const pathToLibs = path.join(__dirname, "../../", "libs/**");
 
 module.exports = {
+  plugins: [],
   webpack: {
     alias: {
       "~": path.resolve(__dirname, "src"),

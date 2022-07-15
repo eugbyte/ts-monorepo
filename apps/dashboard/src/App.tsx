@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {Button} from "@browser-notify-ui/components";
-import {greet} from "@browser-notify-ui/utils";
-import {DashBoard} from "~/components/dashboard";
 
 function App() {
-  greet();
+  useEffect(() => {
+
+  });
   return (
     <div className="App">
       <header className="App-header">
@@ -22,8 +22,10 @@ function App() {
         >
           Learn React
         </a>
+        <h1 className="text-3xl font-bold underline">
+          Hello world!
+        </h1>
         <Button />
-        <DashBoard />
       </header>
     </div>
   );
