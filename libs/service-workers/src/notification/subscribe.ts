@@ -1,37 +1,15 @@
-import {generateVapidPublicKey} from "./auth";
-import axios, { AxiosResponse } from "axios";
+import {urlBase64ToUint8Array} from "./util";
+import axios from "axios";
 
-// the downside is that the API for getting permission recently changed from taking a callback to returning a Promise
-const checkNotifyPromiseBrowserSupport = (): boolean => {
-    try {
-        Notification.requestPermission().then();
-      } catch(e) {
-        return false;
-      }
-      return true;
+const fetchPublicKey = async (): Promise<string> => {
+    // TO DO
+    // api  to backend 
+    return "BPcalllL5OTZwtW-0-4pQXmobTgX6URszc9-UKoTTvpvInhUlPHorlDM8y04J-rrErlQXMVH7_Us983mNmmwsb-z53U";
 }
 
-// get permission from user for push notification
-export const getPermission = async() => {
-    if (!('Notification' in window)) {
-        return false;
-    }
+const _subscribe = async(companyName: string, userID: string, vapidPublicKey: string): Promise<Record<string, string>> => {
+    const url = "http://localhost:7071/api/subscriptions";
 
-    let result = false;
-    if (!checkNotifyPromiseBrowserSupport()) {
-        await Notification.requestPermission((permission: NotificationPermission) => {
-            result = permission === "granted";
-            console.log({permission});
-        })
-        return result;
-    }
-    const permission: NotificationPermission = await Notification.requestPermission();
-    console.log({permission});
-    result = permission === "granted";
-    return result;
-}
-
-export const subscribe = async(message: string): Promise<AxiosResponse<any, any>> => {
     if (!('serviceWorker' in navigator)) {
         throw new Error("navigator does not have service worker");
     }
@@ -39,14 +17,21 @@ export const subscribe = async(message: string): Promise<AxiosResponse<any, any>
     const registration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
     const subscription: PushSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: generateVapidPublicKey()
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
     });
 
     const json = subscription.toJSON();
 
-    return axios.post('http://localhost:7071/api/notify', {
-        message,
+    const result = await axios.post(url, {
+        company: companyName,
+        userID,
         ...json,
-        expiration_time: json.expirationTime,
     });
+
+    return result.data
+}
+
+export const subscribe = async(companyName: string, userID: string): Promise<Record<string, string>> => {
+    const vapidPublicKey = await fetchPublicKey();
+    return _subscribe(companyName, userID, vapidPublicKey);
 }
