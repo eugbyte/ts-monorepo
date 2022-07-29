@@ -9,4 +9,6 @@ srcFile="build/service-worker.js";
 dstDir="public";
 cp $srcFile $dstDir/service-worker.js;
 
+rm -r build
+
 echo "Successfully copied compiled build/service-worker.js file to public/service-worker.js";

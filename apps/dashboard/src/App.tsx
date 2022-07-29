@@ -33,9 +33,6 @@ function App() {
         >
           Learn React
         </a>
-        <h1 className="text-3xl font-bold underline">
-          Hello world!
-        </h1>
         <Button handleClick={handleClick}>Subscribe</Button>
       </header>
     </div>

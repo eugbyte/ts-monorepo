@@ -4,7 +4,7 @@ import axios from "axios";
 const fetchPublicKey = async (): Promise<string> => {
     // TO DO
     // api  to backend 
-    return "BPcalllL5OTZwtW-0-4pQXmobTgX6URszc9-UKoTTvpvInhUlPHorlDM8y04J-rrErlQXMVH7_Us983mNmmwsb-z53U";
+    return "BPlL5OTZwtW-0-4pQXmobTgX6URszc9-UKoTTvpvInhUlPHorlDM8y04J-rrErlQXMVH7_Us983mNmmwsb-z53U";
 }
 
 const _subscribe = async(companyName: string, userID: string, vapidPublicKey: string): Promise<Record<string, string>> => {
@@ -15,12 +15,16 @@ const _subscribe = async(companyName: string, userID: string, vapidPublicKey: st
     }
 
     const registration: ServiceWorkerRegistration = await navigator.serviceWorker.ready;
+    console.log({vapidPublicKey});
     const subscription: PushSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
     });
+    console.log({subscription});
 
     const json = subscription.toJSON();
+    json.expirationTime = 60;
+    console.log(json);
 
     const result = await axios.post(url, {
         company: companyName,
