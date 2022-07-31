@@ -9,21 +9,27 @@ const checkNotifyPromiseBrowserSupport = (): boolean => {
 }
 
 // get permission from user for push notification
-export const getPermission = async() => {
+export const requestPermission = async(): Promise<NotificationPermission> => {
     if (!('Notification' in window)) {
-        return false;
+        return 'denied';
     }
 
-    let result = false;
+    let result: NotificationPermission = 'denied';
     if (!checkNotifyPromiseBrowserSupport()) {
         await Notification.requestPermission((permission: NotificationPermission) => {
-            result = permission === "granted";
+            result = permission;
             console.log({permission});
         })
         return result;
     }
-    const permission: NotificationPermission = await Notification.requestPermission();
-    console.log({permission});
-    result = permission === "granted";
+    result = await Notification.requestPermission();
     return result;
+}
+
+export const getPermissionState = (): NotificationPermission => {
+    if (!('Notification' in window)) {
+        return 'denied';
+    }
+    return Notification.permission
+
 }

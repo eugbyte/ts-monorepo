@@ -1,1 +1,1 @@
-export {register, getPermission, subscribe, handlePush} from "./notification";
+export {register, requestPermission, getPermissionState, subscribe, handlePush} from "./notification";
