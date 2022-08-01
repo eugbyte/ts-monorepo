@@ -40,7 +40,8 @@
     "cp-sw": "bash  ./sw-dev.sh",
     "build": "rm -f 'public/service-worker.js' && craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "lint:fix": "eslint . --ext .js,.ts,.tsx --fix"
   },
   "eslintConfig": {
     "extends": [

@@ -13,7 +13,7 @@ export const usePermission = () => {
       useEffect(() => {
         const id = setInterval(() => {
           setPermission(getPermissionState());
-        }, 2000);
+        }, 1000);
         setPermission(getPermissionState());
         return () => clearInterval(id);
       }, []);
