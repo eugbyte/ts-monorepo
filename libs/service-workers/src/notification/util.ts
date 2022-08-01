@@ -1,7 +1,5 @@
-const vapidKey = process.env.VAPID_PUBLIC_KEY || "";
-
 // Copied from the https://gist.github.com/Klerith/80abd742d726dd587f4bd5d6a0ab26b6
-const urlBase64ToUint8Array = (base64String: string) => {
+export const urlBase64ToUint8Array = (base64String: string): Uint8Array => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
         .replace(/\-/g, '+')
@@ -15,5 +13,3 @@ const urlBase64ToUint8Array = (base64String: string) => {
     }
     return outputArray;
 };
-
-export const generateVapidPublicKey = () => urlBase64ToUint8Array(vapidKey);
