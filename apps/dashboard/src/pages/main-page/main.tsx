@@ -26,7 +26,7 @@ export const MainPage: React.FC = () => {
   const formHook = useForm({
     mode: "onBlur",
     defaultValues: {
-      "notifications": [{"message": "", "delay": ""}]
+      "notifications": [{"title": "", "message": "", "delay": ""}]
     }
   });
   const { control, getValues, formState, trigger } = formHook;
@@ -36,7 +36,7 @@ export const MainPage: React.FC = () => {
   });
   
   const handleAddRow = () => {
-    append({"message": "", "delay": ""});
+    append({"title": "", "message": "", "delay": ""});
   }
   const handleDeleteRow = (index: number) => {
     if (fields.length > 1) {
@@ -49,19 +49,21 @@ export const MainPage: React.FC = () => {
     console.log(formState.errors);
     console.log(getValues());
     if (!isValid) {
+      console.log("errors detected");
       return;
     }
     
     const url = "http://localhost:7071/api/notifications";
-      const result = await axios.post(url, {
-        "userID": fakeUser,
-        "company": fakeCompany,
-        "notification": {
-            "title": "My title",
-            "body": "My message",
-            "icon": "My icon"
-        }
+    const result = await axios.post(url, {
+      "userID": fakeUser,
+      "company": fakeCompany,
+      "notification": {
+          "title": "My title",
+          "body": "My message",
+          "icon": "My icon"
+      }
     });
+    console.log(result.data);
   }
 
   const buttonTextDict: Record<NotificationPermission , string> = {
