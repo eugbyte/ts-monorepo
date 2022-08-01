@@ -74,17 +74,21 @@ export const MainPage: React.FC = () => {
 
   return (
     <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>
-      <h1 className='text-xl text-white font-bold'>1. Grant permission</h1>
-      <Button className='mt-2' 
-        handleClick={handleSubscribe}>
-          {buttonTextDict[permission as NotificationPermission]}
-      </Button>
-      {permission === "denied" &&
-        <Instruction />
-      }
+        <section className="flex flex-col items-center">
+          <h1 className='text-xl text-white font-bold text-center'>1. Grant permission</h1>
+
+          <Button className='mt-2' 
+            handleClick={handleSubscribe}>
+              {buttonTextDict[permission as NotificationPermission]}
+          </Button>
+          {permission === "denied" &&
+            <Instruction />
+          }
+      </section>      
       {permission === "granted" &&
         <>
-          <h1 className='text-xl text-white font-bold mt-10'>2. Create notifications</h1>
+        <section>
+          <h1 className='text-xl text-white font-bold mt-10 text-center'>2. Create notifications</h1>
           <div className='mt-2'>
             <div className='flex flex-col' >
               {fields.map((field, index) => (
@@ -95,16 +99,18 @@ export const MainPage: React.FC = () => {
               handleClick={handleAddRow}>➕
             </Button>
           </div>
+          </section>
+          <section>
+          <h1 className='text-xl text-white font-bold mt-10 text-center'>3. Send!</h1>
+
+            <div className="flex flex-row justify-center mt-2">
+              <Button className='mt-2 font-bold px-10 py-5' 
+                handleClick={onSubmit}>Send
+              </Button>
+            </div>
+          </section>
         </>
       }
-      <>
-        <h1 className='text-xl text-white font-bold mt-10'>3. Send!</h1>
-        <div className="flex flex-row justify-center mt-2">
-        <Button className='mt-2 font-bold px-10 py-5' 
-          handleClick={onSubmit}>Send
-        </Button>
-        </div>
-      </>
     </div>
   );
 }

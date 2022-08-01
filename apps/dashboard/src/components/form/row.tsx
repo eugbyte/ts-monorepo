@@ -38,7 +38,7 @@ export const Row: React.FC<Props> = ({formHook, field, index, handleDeleteRow}) 
                 <div className="flex flex-col sm:flex-row" key={field.id}>
                     <Input className="w-full sm:w-1/3" register={register(`notifications.${index}.title`, { required: true, minLength: 1 } as const)} placeholder='Title' />
                     <Input className="w-full sm:w-1/3" register={register(`notifications.${index}.message`, { required: true, minLength: 1 } as const)} placeholder='Message' />
-                    <Input className="w-full sm:w-1/3" inputMode="numeric" register={register(`notifications.${index}.delay`, { required: true, min: 0 })} placeholder='Delay(sec) (Optional)' />
+                    <Input className="w-full sm:w-1/3" inputMode="numeric" register={register(`notifications.${index}.delay`)} placeholder='Delay(s) - Optional' />
                 </div>                
                 <Button className="mx-1" handleClick={handleDeleteRow.bind(null, index)}>➖</Button>
                 
