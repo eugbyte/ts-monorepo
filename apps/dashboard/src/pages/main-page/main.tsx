@@ -73,7 +73,7 @@ export const MainPage: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-2 sm:px-0'>
+    <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>
       <h1 className='text-xl text-white font-bold'>1. Grant permission</h1>
       <Button className='mt-2' 
         handleClick={handleSubscribe}>

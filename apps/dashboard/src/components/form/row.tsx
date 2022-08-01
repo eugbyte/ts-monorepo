@@ -33,12 +33,12 @@ export const Row: React.FC<Props> = ({formHook, field, index, handleDeleteRow}) 
         return errObj[fld] != null
     }
     return (
-        <div>
-            <div className='flex flex-row items-start my-1 flex-wrap justify-end space-y-1 sm:space-y-0'>
-                <div className="flex" key={field.id}>
-                    <Input className="sm:w-1/3" register={register(`notifications.${index}.title`, { required: true, minLength: 1 } as const)} placeholder='Title' />
-                    <Input className="sm:w-1/3" register={register(`notifications.${index}.message`, { required: true, minLength: 1 } as const)} placeholder='Message' />
-                    <Input className="sm:w-1/3" inputMode="numeric" register={register(`notifications.${index}.delay`, { required: true, min: 0 })} placeholder='Delay(sec) (Optional)' />
+        <div className="mb-5">
+            <div className='flex flex-col sm:flex-row items-end my-1 flex-wrap justify-end space-y-1 sm:space-y-0'>
+                <div className="flex flex-col sm:flex-row" key={field.id}>
+                    <Input className="w-full sm:w-1/3" register={register(`notifications.${index}.title`, { required: true, minLength: 1 } as const)} placeholder='Title' />
+                    <Input className="w-full sm:w-1/3" register={register(`notifications.${index}.message`, { required: true, minLength: 1 } as const)} placeholder='Message' />
+                    <Input className="w-full sm:w-1/3" inputMode="numeric" register={register(`notifications.${index}.delay`, { required: true, min: 0 })} placeholder='Delay(sec) (Optional)' />
                 </div>                
                 <Button className="mx-1" handleClick={handleDeleteRow.bind(null, index)}>➖</Button>
                 
