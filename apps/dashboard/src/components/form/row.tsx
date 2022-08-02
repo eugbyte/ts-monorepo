@@ -1,12 +1,16 @@
 import { Button, Input } from "@browser-notify-ui/components";
 import React from "react";
 import { DeepRequired, FieldArrayWithId, FieldError, FieldErrorsImpl, Merge, UseFormReturn } from "react-hook-form";
-import { Notify } from "~/models/Notification";
+
+interface Notify {
+    title: string;
+    message: string;
+    delay: string;
+}
 
 type Field = FieldArrayWithId<{
     notifications: Notify[];
 }, "notifications", "id">;
-
 
 interface Props {
     formHook: UseFormReturn<{
