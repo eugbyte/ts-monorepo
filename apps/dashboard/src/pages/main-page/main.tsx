@@ -6,12 +6,11 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { Row } from "~/components/form";
 import { Instruction } from "~/components/instruction";
 import axios from "axios";
-
-// TO DO - use faker.js to generate the info
-const fakeCompany = "fakepanda";
-const fakeUser = "abc@m.com";
+import { generateCredentials } from "./gen-cred";
 
 export const MainPage: React.FC = () => {
+  const {userID: fakeUser, company: fakeCompany} = generateCredentials();
+  
   const [permission] = usePermission();
 
   const handleSubscribe = async (): Promise<void> => {
