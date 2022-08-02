@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@browser-notify-ui/components";
 import { subscribe, requestPermission } from '@browser-notify-ui/service-workers';
 import { usePermission } from "~/hooks";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, UseFormReturn } from "react-hook-form";
 import { Row } from "~/components/form";
 import { Instruction } from "~/components/instruction";
 import axios from "axios";
