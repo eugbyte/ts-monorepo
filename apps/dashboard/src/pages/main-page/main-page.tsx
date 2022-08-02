@@ -2,11 +2,16 @@ import React from "react";
 import { Button } from "@browser-notify-ui/components";
 import { subscribe } from '@browser-notify-ui/service-workers';
 import { usePermission } from "~/hooks";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, UseFormReturn } from "react-hook-form";
 import { Row } from "~/components/form";
 import { Instruction } from "~/components/instruction";
 import axios from "axios";
-import { generateCredentials } from "./gen-cred";
+import { generateCredentials, sleep } from "./util";
+import { Notify } from "~/models/Notify";
+
+type FormValues = {
+  notifications: Notify[];
+};
 
 export const MainPage: React.FC = () => {
   const {userID: fakeUser, company: fakeCompany} = generateCredentials();
@@ -22,10 +27,10 @@ export const MainPage: React.FC = () => {
     }    
   };
 
-  const formHook = useForm({
+  const formHook = useForm<FormValues>({
     mode: "onBlur",
     defaultValues: {
-      "notifications": [{"title": "", "message": "", "delay": ""}]
+      "notifications": [{"title": "", "message": "", "delay": undefined}]
     }
   });
   const { control, getValues, formState, trigger } = formHook;
@@ -35,34 +40,42 @@ export const MainPage: React.FC = () => {
   });
   
   const handleAddRow = () => {
-    append({"title": "", "message": "", "delay": ""});
+    append({"title": "", "message": "", "delay": 0});
   }
   const handleDeleteRow = (index: number) => {
     if (fields.length > 1) {
       remove(index);
     }
   }
-
+  
   const onSubmit = async() => {
     const isValid = await trigger();
-    console.log(formState.errors);
-    console.log(getValues());
     if (!isValid) {
       console.log("errors detected");
       return;
     }
     
+    const {notifications} = getValues();
     const url = "http://localhost:7071/api/notifications";
-    const result = await axios.post(url, {
-      "userID": fakeUser,
-      "company": fakeCompany,
-      "notification": {
-          "title": "My title",
-          "body": "My message",
-          "icon": "My icon"
+
+    for (const notify of notifications) {
+      console.log("sleeping...");
+      await sleep(notify.delay * 1000);
+      try {
+        const result = await axios.post(url, {
+          "userID": fakeUser,
+          "company": fakeCompany,
+          "notification": {
+              "title": notify.title,
+              "body": notify.message,
+              "icon": "My icon"
+          }
+        });
+        console.log(result);
+      } catch (err) {
+        console.error(err);
       }
-    });
-    console.log(result.data);
+    }   
   }
 
   const buttonTextDict: Record<NotificationPermission , string> = {
@@ -91,7 +104,11 @@ export const MainPage: React.FC = () => {
           <div className='mt-2'>
             <div className='flex flex-col' >
               {fields.map((field, index) => (
-                <Row formHook={formHook} field={field} index={index} handleDeleteRow={handleDeleteRow} key={field.id}/>
+                <div className="flex flex-col items-center">
+                  <Row formHook={formHook} field={field} index={index} handleDeleteRow={handleDeleteRow} key={field.id}/>
+                  
+                  <p>⬇️</p>
+                </div>
               ))}
             </div>
             <Button className='mt-2' 
