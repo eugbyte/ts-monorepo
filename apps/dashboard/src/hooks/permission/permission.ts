@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 export const usePermission = (): [NotificationPermission,  (perm: NotificationPermission) => void] => {
     const [permission, setPermission] = useState<NotificationPermission>(getPermissionState());
+    const [intervalId, setIntervalId] = useState<NodeJS.Timer>();
 
     /**
        * React's virtual dom diffing only updates the actual dom based on changes in the virtual dom
@@ -10,22 +11,25 @@ export const usePermission = (): [NotificationPermission,  (perm: NotificationPe
        * Thus, useEffect(() => {}, [Notification.permission]) does not work
        * Workaround is to use setInterval and periodically poll for the permission status
      */
-     let id = setInterval(() => {
-      setPermission(getPermissionState());
-    }, 1000);
-
       useEffect(() => {
+        const id = setInterval(() => {
+          setPermission(getPermissionState());
+        }, 1000);
+        setIntervalId(id);
         setPermission(getPermissionState());
-        return () => clearInterval(id);
+        // clean up the interval
+        return () => clearInterval(intervalId);
       }, []);
+
 
       // To avoid race conditions between setting the updated permission and the polling
       const setPerm = (perm: NotificationPermission) => {
-        clearInterval(id);
+        clearInterval(intervalId);
         setPermission(perm);
-        id = setInterval(() => {
+        const id = setInterval(() => {
           setPermission(getPermissionState());
         }, 1000);
+        setIntervalId(intervalId);
       }
 
       return [permission, setPerm];
