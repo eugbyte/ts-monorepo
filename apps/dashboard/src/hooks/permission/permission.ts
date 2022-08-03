@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 export const usePermission = (): [NotificationPermission,  (perm: NotificationPermission) => void] => {
     const [permission, setPermission] = useState<NotificationPermission>(getPermissionState());
-    if (!("permission" in navigator)) {
+    if (!("permissions" in navigator)) {
       console.error("permission not supported in navigator");
       return [permission, setPermission];
     }
@@ -14,7 +14,7 @@ export const usePermission = (): [NotificationPermission,  (perm: NotificationPe
        * Thus, useEffect(() => {}, [Notification.permission]) does not work
        * Workaround is to use setInterval and periodically poll for the permission status
     */
-   const handlePermission = async() => {
+    const handlePermission = async() => {
       const permStatus: PermissionStatus = await navigator.permissions.query({ name: 'notifications' });
       const state: PermissionState =  permStatus.state;   
       // PermissionState != NotificationPermission

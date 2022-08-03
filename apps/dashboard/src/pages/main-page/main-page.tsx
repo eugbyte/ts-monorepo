@@ -41,9 +41,11 @@ export const MainPage: React.FC = () => {
       const res = await subscribe(company, userID);
       console.log(res);
       localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, true.toString());
+      window.dispatchEvent(new Event("storage"));
     } catch (err) {
       console.error(err);
       localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, false.toString());
+      window.dispatchEvent(new Event("storage"));
     }    
   };
 
