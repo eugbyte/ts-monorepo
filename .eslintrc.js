@@ -9,10 +9,16 @@ module.exports = {
     extends: [
       'eslint:recommended',
       'plugin:@typescript-eslint/recommended',
-      'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
       'prettier',
     ],
-    rules: {
-    },
-    ignorePatterns: ['.eslintrc.js', 'craco.config.js', 'reportWebVitals.ts', 'postcss.config.js', 'tailwind.config.js', 'serviceWorkerRegistration.ts', 'service-worker.ts']
+    ignorePatterns: [
+      '.eslintrc.js', 
+      'craco.config.js', 
+      'reportWebVitals.ts', 
+      'postcss.config.js', 
+      'tailwind.config.js', 
+      'serviceWorkerRegistration.ts', 
+      'service-worker.ts'
+    ]
 };
