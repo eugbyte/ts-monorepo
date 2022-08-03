@@ -1,7 +1,7 @@
 import { getPermissionState } from "@browser-notify-ui/service-workers";
 import { useState, useEffect } from "react";
 
-export const usePermission = () => {
+export const usePermission = (): [NotificationPermission,  (perm: NotificationPermission) => void] => {
     const [permission, setPermission] = useState<NotificationPermission>(getPermissionState());
 
     /**
@@ -10,13 +10,23 @@ export const usePermission = () => {
        * Thus, useEffect(() => {}, [Notification.permission]) does not work
        * Workaround is to use setInterval and periodically poll for the permission status
      */
+     let id = setInterval(() => {
+      setPermission(getPermissionState());
+    }, 1000);
+
       useEffect(() => {
-        const id = setInterval(() => {
-          setPermission(getPermissionState());
-        }, 1000);
         setPermission(getPermissionState());
         return () => clearInterval(id);
       }, []);
 
-      return [permission, setPermission];
+      // To avoid race conditions between setting the updated permission and the polling
+      const setPerm = (perm: NotificationPermission) => {
+        clearInterval(id);
+        setPermission(perm);
+        id = setInterval(() => {
+          setPermission(getPermissionState());
+        }, 1000);
+      }
+
+      return [permission, setPerm];
 }
