@@ -8,6 +8,7 @@ import { Instruction } from "~/components/instruction";
 import axios from "axios";
 import { generateCredentials, sleep } from "./util";
 import { Notify } from "~/models/Notify";
+import { CREDENTIAL } from "~/models/enums";
 
 type FormValues = {
   notifications: Notify[];
@@ -89,6 +90,8 @@ export const MainPage: React.FC = () => {
     "denied": "Blocked ❌"
   };
 
+  const hasSubscribed: boolean = localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_USERID) != null && localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_COMPANY) != null;
+
   return (
     <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>
         <section className="flex flex-col items-center">
@@ -107,7 +110,7 @@ export const MainPage: React.FC = () => {
           <h1 className='text-xl text-white font-bold text-center'>2. Subscribe</h1>
           <Button className='mt-2' 
             handleClick={handleSubscribe}>
-              Subscribe
+              {hasSubscribed ? "Subscribed ✔️" : "Subscribe"}          
           </Button>          
       </section>      
         <section>
