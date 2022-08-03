@@ -1,6 +1,5 @@
-import React from "react";
-import { Button } from "@browser-notify-ui/components";
-import { subscribe, requestPermission } from '@browser-notify-ui/service-workers';
+import React, { useEffect, useState } from "react";
+import { subscribe, requestPermission, pushMessage as push } from '@browser-notify-ui/service-workers';
 import { usePermission } from "~/hooks";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -10,6 +9,7 @@ import { PermissionSection } from "~/components/sections/section1";
 import { SubscribeSection } from "~/components/sections/section2";
 import { FormSection } from "~/components/sections/section3";
 import { PushSection } from "~/components/sections/section4";
+import cloneDeep from "lodash.clonedeep";
 
 type FormValues = {
   notifications: Notify[];
@@ -17,10 +17,15 @@ type FormValues = {
 
 export const MainPage: React.FC = () => {
 
-  const steps = new Map<number, boolean>([[0, true], [1, false], [2, false], [3, false]]);
+  // user can only progress towards towards the next step if certain conditions are fulfilled
+  const [steps, setSteps] = useState<Record<number, boolean>>({
+    0: true,
+    1: false,
+    2: false,
+    3: false,
+  });
 
-
-  const {userID: fakeUser, company: fakeCompany} = generateCredentials();
+  const {userID, company} = generateCredentials();
   
   const [permission, setPermission] = usePermission();
 
@@ -31,7 +36,7 @@ export const MainPage: React.FC = () => {
 
   const handleSubscribe = async (): Promise<void> => {
     try {
-      const res = await subscribe(fakeCompany, fakeUser);
+      const res = await subscribe(company, userID);
       console.log(res);
     } catch (err) {
       console.error(err);
@@ -44,18 +49,27 @@ export const MainPage: React.FC = () => {
       "notifications": [{"title": "", "message": ""}]
     }
   });
-  const { getValues, trigger } = formHook;
+  const { getValues, formState } = formHook;
+  const { isValid } = formState;
 
-  
+  const pushMessage = push.bind(null, userID, company);
+
+  // user can only progress towards towards the next step if previous step is completed, and when certain conditions are fulfilled
+  useEffect(() => {
+    const stepsCopy = cloneDeep(steps);
+    stepsCopy[1] = stepsCopy[0] && permission === "granted";
+    stepsCopy[2] = stepsCopy[1] && userID.trim().length > 0 && company.trim().length > 0;
+    stepsCopy[3] = stepsCopy[2];
+    setSteps(stepsCopy);
+  }, [permission, userID, company]);
+
   const onSubmit = async() => {
-    const isValid = await trigger();
     if (!isValid) {
       console.log("errors detected");
       return;
     }
     
     const {notifications} = getValues();
-    const url = "http://localhost:7071/api/notifications";
 
     for (let i = 0; i < notifications.length; i++) {
       const notify: Notify = notifications[i];
@@ -64,15 +78,7 @@ export const MainPage: React.FC = () => {
       await sleep(sleepDuration);
 
       try {
-        const result = await axios.post(url, {
-          "userID": fakeUser,
-          "company": fakeCompany,
-          "notification": {
-              "title": notify.title,
-              "body": notify.message,
-              "icon": "My icon"
-          }
-        });
+        const result = await pushMessage(notify.title, notify.message);
         console.log(result);
       } catch (err) {
         console.error(err);
@@ -82,14 +88,18 @@ export const MainPage: React.FC = () => {
 
   return (
     <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>
-      <PermissionSection permission={permission} handlePermission={handlePermission} />       
-      {permission === "granted" &&
-        <>
-          <SubscribeSection handleSubscribe={handleSubscribe} />   
-          <FormSection formHook={formHook}/>
-          <PushSection onSubmit={onSubmit}/>
-        </>
+      {steps[0] &&
+        <PermissionSection permission={permission} handlePermission={handlePermission} />
       }
+      {steps[1] &&
+        <SubscribeSection handleSubscribe={handleSubscribe} />   
+      }      
+      {steps[2] &&
+        <FormSection formHook={formHook}/>
+      }    
+      {steps[3] &&
+        <PushSection onSubmit={onSubmit}/>
+      } 
     </div>
   );
 }

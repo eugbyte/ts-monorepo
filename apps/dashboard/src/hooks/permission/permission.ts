@@ -23,7 +23,7 @@ export const usePermission = (): [NotificationPermission,  (perm: NotificationPe
 
 
       // To avoid race conditions between setting the updated permission and the polling
-      const setPerm = (perm: NotificationPermission) => {
+      const setPermSafely = (perm: NotificationPermission) => {
         clearInterval(intervalId);
         setPermission(perm);
         const id = setInterval(() => {
@@ -32,5 +32,5 @@ export const usePermission = (): [NotificationPermission,  (perm: NotificationPe
         setIntervalId(intervalId);
       }
 
-      return [permission, setPerm];
+      return [permission, setPermSafely];
 }
