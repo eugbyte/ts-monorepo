@@ -1,5 +1,5 @@
 import { Button } from "@browser-notify-ui/components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CREDENTIAL } from "~/models/enums";
 
 interface Props {
@@ -7,10 +7,10 @@ interface Props {
 }
 
 export const SubscribeSection: React.FC<Props> = ({handleSubscribe}) => {
-    const userID = localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_USERID) || "";
-    const company = localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_COMPANY) || "";
-
-    const hasSubscribed: boolean = userID.trim().length > 0 && company.trim().length > 0;
+    const [hasSubscribed, setHasSubscribed] = useState<boolean>(localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED) === "true");
+    useEffect(() => {
+        setHasSubscribed(localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED) === "true")
+    }, [localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED)])
 
     return <section className="flex flex-col items-center mt-10">
     <h1 className='text-xl text-white font-bold text-center'>2. Subscribe</h1>

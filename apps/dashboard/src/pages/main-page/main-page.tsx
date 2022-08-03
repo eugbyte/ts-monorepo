@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { subscribe, requestPermission, pushMessage as push } from '@browser-notify-ui/service-workers';
 import { usePermission } from "~/hooks";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { generateCredentials, sleep } from "./util";
 import { Notify } from "~/models/Notify";
 import { PermissionSection } from "~/components/sections/section1";
@@ -10,6 +9,7 @@ import { SubscribeSection } from "~/components/sections/section2";
 import { FormSection } from "~/components/sections/section3";
 import { PushSection } from "~/components/sections/section4";
 import cloneDeep from "lodash.clonedeep";
+import { CREDENTIAL } from "~/models/enums";
 
 type FormValues = {
   notifications: Notify[];
@@ -38,8 +38,10 @@ export const MainPage: React.FC = () => {
     try {
       const res = await subscribe(company, userID);
       console.log(res);
+      localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, true.toString());
     } catch (err) {
       console.error(err);
+      localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, false.toString());
     }    
   };
 
@@ -58,7 +60,7 @@ export const MainPage: React.FC = () => {
   useEffect(() => {
     const stepsCopy = cloneDeep(steps);
     stepsCopy[1] = stepsCopy[0] && permission === "granted";
-    stepsCopy[2] = stepsCopy[1] && userID.trim().length > 0 && company.trim().length > 0;
+    stepsCopy[2] = stepsCopy[1] && localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED) === "true";
     stepsCopy[3] = stepsCopy[2];
     setSteps(stepsCopy);
   }, [permission, userID, company]);
@@ -83,7 +85,7 @@ export const MainPage: React.FC = () => {
       } catch (err) {
         console.error(err);
       }
-    }   
+    }
   }
 
   return (

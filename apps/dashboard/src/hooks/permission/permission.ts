@@ -13,6 +13,7 @@ export const usePermission = (): [NotificationPermission,  (perm: NotificationPe
      */
       useEffect(() => {
         const id = setInterval(() => {
+          navigator.permissions.query
           setPermission(getPermissionState());
         }, 1000);
         setIntervalId(id);
