@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { subscribe, requestPermission, pushMessage as push } from '@browser-notify-ui/service-workers';
-import { usePermission } from "~/hooks";
+import { useLocalStorage, usePermission } from "~/hooks";
 import { useForm } from "react-hook-form";
 import { generateCredentials, sleep } from "./util";
 import { Notify } from "~/models/Notify";
@@ -28,6 +28,8 @@ export const MainPage: React.FC = () => {
   const {userID, company} = generateCredentials();
   
   const [permission, setPermission] = usePermission();
+  const [_isSubscribed] = useLocalStorage(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED);
+  const isSubscribed = _isSubscribed === "true";
 
   const handlePermission = async() => {
     const perm = await requestPermission();
@@ -60,10 +62,10 @@ export const MainPage: React.FC = () => {
   useEffect(() => {
     const stepsCopy = cloneDeep(steps);
     stepsCopy[1] = stepsCopy[0] && permission === "granted";
-    stepsCopy[2] = stepsCopy[1] && localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED) === "true";
+    stepsCopy[2] = stepsCopy[1] && isSubscribed;
     stepsCopy[3] = stepsCopy[2];
     setSteps(stepsCopy);
-  }, [permission, userID, company]);
+  }, [permission]);
 
   const onSubmit = async() => {
     if (!isValid) {
