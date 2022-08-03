@@ -18,7 +18,7 @@ export const PermissionSection: React.FC<Props> = ({permission, handlePermission
           <h1 className='text-xl text-white font-bold text-center'>1. Grant permission</h1>
           <Button className='mt-2' 
             handleClick={handlePermission}>
-              {buttonTextDict[permission as NotificationPermission]}
+              {buttonTextDict[permission ]}
           </Button>
           {permission === "denied" &&
             <Instruction />
