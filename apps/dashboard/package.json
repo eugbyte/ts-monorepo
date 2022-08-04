@@ -39,7 +39,7 @@
   "scripts": {
     "start": "cross-env BROWSER=none craco start",
     "build:sw": "bash  ./sw-dev.sh",
-    "demo": "npm run build:sw && npm run dev",
+    "demo": "npm run build:sw && npm run start",
     "build": "rm -f 'public/service-worker.js' && craco build",
     "test": "craco test",
     "eject": "craco eject",

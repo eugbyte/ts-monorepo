@@ -1,1 +1,1 @@
-export {useHttpQuery} from "./use-http-query";
+export { useHttpQuery } from "./use-http-query";

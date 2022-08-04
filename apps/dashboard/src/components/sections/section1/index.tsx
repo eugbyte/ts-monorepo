@@ -1,1 +1,1 @@
-export {PermissionSection} from "./permission-section";
+export { PermissionSection } from "./permission-section";
