@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscribe, requestPermission, pushMessage } from '@browser-notify-ui/service-workers';
+import { subscribe, requestPermission, pushMessage, broadcast } from '@browser-notify-ui/service-workers';
 import { useLocalStorage, usePermission } from "~/hooks";
 import { useForm } from "react-hook-form";
 import { generateUserID, generateCompany, sleep } from "./util";
@@ -91,7 +91,7 @@ export const MainPage: React.FC = () => {
     const {notifications} = getValues();
     for (let i = 0; i < notifications.length; i++) {
       const notify: Notify = notifications[i];
-      const sleepDuration = i > 0 ? 2500 : 0;
+      const sleepDuration = i > 0 ? 2000 : 0;
       console.log(`sleeping for ${sleepDuration}`);
       await sleep(sleepDuration);
 
@@ -105,16 +105,17 @@ export const MainPage: React.FC = () => {
     }
   }
 
-  const broadcast = new BroadcastChannel('BROSWER_NOTIFY_UI');
-  broadcast.onmessage = (event) => {
-    if (event.data!= null) {
-      const data = event.data as Record<string, string>;
-      if (data["type"] === "BROSWER_NOTIFY_UI") {
-        console.log("first message detected");
-        setPushLoading(false);
+  useEffect(() => {
+    broadcast.onmessage = (event) => {
+      if (event.data!= null) {
+        const data = event.data as Record<string, string>;
+        if (data["type"] === "BROSWER_NOTIFY_UI") {
+          console.log(`message detected: ${(new Date()).getSeconds()}.${(new Date()).getMilliseconds()}s`);
+          setPushLoading(false);
+        }
       }
-    }
-  };
+    };
+  }, []);
 
   return (
     <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>

@@ -10,18 +10,19 @@ type QueryFn = (...args: any[]) => Promise<any>;
 export const useHttpQuery = (httpCallback: QueryFn): [QUERY_STATUS, QueryFn] => {
     const [subQueryStatus, setSubQueryStatus] = useState(QUERY_STATUS.UNINITIALIZED);
 
-    let res: any = {};
 
     const makeQuery: QueryFn = async(...args) => {
+        let res: any = undefined;
         setSubQueryStatus(QUERY_STATUS.LOADING);
         try {
             res = await httpCallback(...args);
-            console.log(res);
             setSubQueryStatus(QUERY_STATUS.SUCCESS);
         } catch(err) {
             console.error(err);
-            setSubQueryStatus(QUERY_STATUS.ERROR);
+            setSubQueryStatus(QUERY_STATUS.ERROR);    
+            throw err;        
         }
+        return res;
     }
 
     return [subQueryStatus, makeQuery];
