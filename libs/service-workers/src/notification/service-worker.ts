@@ -15,6 +15,8 @@ export const handlePush = (event: PushEvent, onComplete = () => {}) => {
   const displayPromise: Promise<void> = self.registration.showNotification(data.title, {
     body: data.body,
   });
-  const promiseChain = Promise.all([displayPromise, onComplete()]);
+  const promiseChain = Promise.all([displayPromise])
+    .then(() => onComplete())
+    .catch((err) => console.error(err));
   event.waitUntil(promiseChain);
 }
