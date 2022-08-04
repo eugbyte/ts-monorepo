@@ -7,7 +7,7 @@ interface Notification {
   icon: string;
 }
 
-export const handlePush = (event: PushEvent) => {
+export const handlePush = (event: PushEvent, onComplete?: Function) => {
   if (event == null || event.data == null) {
     return;
   }
@@ -15,6 +15,12 @@ export const handlePush = (event: PushEvent) => {
   const displayPromise: Promise<void> = self.registration.showNotification(data.title, {
     body: data.body,
   });
-  const promiseChain = Promise.all([displayPromise]);
+  const promiseChain = Promise.all([displayPromise])
+    .then(() => {
+      if (onComplete != null) {
+        onComplete();
+      }
+    })
+    .catch((err) => console.error(err));
   event.waitUntil(promiseChain);
 }

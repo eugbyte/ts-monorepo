@@ -79,4 +79,8 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
-self.addEventListener('push', handlePush);
+self.addEventListener('push', (event) => {
+  const broadcast = new BroadcastChannel('BROSWER_NOTIFY_UI');
+  const onComplete = () => broadcast.postMessage({type: 'BROSWER_NOTIFY_UI'});
+  handlePush(event, onComplete);
+});

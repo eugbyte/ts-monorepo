@@ -79,15 +79,16 @@ export const MainPage: React.FC = () => {
   const { isValid } = formState;
 
   // When the user submits the form, we add a delay in between the notification messages submitted
-  const [pushQueryStatus, makePushQuery] = useHttpQuery(pushMessage.bind(null, userID, company));   // bind and fix the credentials arguments as they remain the same
+  const [_, makePushQuery] = useHttpQuery(pushMessage.bind(null, userID, company));   // bind and fix the credentials arguments as they remain the same
+  const [isPushLoading, setPushLoading] = useState(false);
   const onSubmit = async() => {
     if (!isValid) {
       console.log("errors detected");
       return;
     }
+    setPushLoading(true);
 
     const {notifications} = getValues();
-
     for (let i = 0; i < notifications.length; i++) {
       const notify: Notify = notifications[i];
       const sleepDuration = i > 0 ? 2500 : 0;
@@ -98,10 +99,22 @@ export const MainPage: React.FC = () => {
         const result = await makePushQuery(notify.title, notify.message);
         console.log(result);
       } catch (err) {
+        setPushLoading(false);
         console.error(err);
       }
     }
   }
+
+  const broadcast = new BroadcastChannel('BROSWER_NOTIFY_UI');
+  broadcast.onmessage = (event) => {
+    if (event.data!= null) {
+      const data = event.data as Record<string, string>;
+      if (data["type"] === "BROSWER_NOTIFY_UI") {
+        console.log("first message detected");
+        setPushLoading(false);
+      }
+    }
+  };
 
   return (
     <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>
@@ -120,7 +133,7 @@ export const MainPage: React.FC = () => {
       {steps[3] &&
       <>
         <PushSection onSubmit={onSubmit}/>
-        <BarLoader loading={pushQueryStatus === QUERY_STATUS.LOADING} width={200} className="mt-2" color={"#FFFFFF"}/>
+        <BarLoader loading={isPushLoading} width={200} className="mt-2" color={"#FFFFFF"}/>
       </>
       } 
     </div>
