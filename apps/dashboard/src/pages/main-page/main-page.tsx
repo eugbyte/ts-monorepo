@@ -1,13 +1,14 @@
-import React from "react";
-import { Button } from "@browser-notify-ui/components";
-import { subscribe, requestPermission } from '@browser-notify-ui/service-workers';
-import { usePermission } from "~/hooks";
-import { useForm, useFieldArray } from "react-hook-form";
-import { Row } from "~/components/form";
-import { Instruction } from "~/components/instruction";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { subscribe, requestPermission, pushMessage as push } from '@browser-notify-ui/service-workers';
+import { useLocalStorage, usePermission } from "~/hooks";
+import { useForm } from "react-hook-form";
 import { generateCredentials, sleep } from "./util";
 import { Notify } from "~/models/Notify";
+import { PermissionSection } from "~/components/sections/section1";
+import { SubscribeSection } from "~/components/sections/section2";
+import { FormSection } from "~/components/sections/section3";
+import { PushSection } from "~/components/sections/section4";
+import cloneDeep from "lodash.clonedeep";
 import { CREDENTIAL } from "~/models/enums";
 
 type FormValues = {
@@ -15,21 +16,36 @@ type FormValues = {
 };
 
 export const MainPage: React.FC = () => {
-  const {userID: fakeUser, company: fakeCompany} = generateCredentials();
+
+  // user can only progress towards towards the next step if certain conditions are fulfilled
+  const [steps, setSteps] = useState<Record<number, boolean>>({
+    0: true,
+    1: false,
+    2: false,
+    3: false,
+  });
+
+  const {userID, company} = generateCredentials();
   
   const [permission, setPermission] = usePermission();
+  const [_isSubscribed] = useLocalStorage(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED);
+  const isSubscribed = _isSubscribed === "true";
 
-  const handleRequestPermission = async() => {
+  const handlePermission = async() => {
     const perm = await requestPermission();
     setPermission(perm);
   }
 
   const handleSubscribe = async (): Promise<void> => {
     try {
-      const res = await subscribe(fakeCompany, fakeUser);
+      const res = await subscribe(company, userID);
       console.log(res);
+      localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, true.toString());
+      window.dispatchEvent(new Event("storage"));
     } catch (err) {
       console.error(err);
+      localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, false.toString());
+      window.dispatchEvent(new Event("storage"));
     }    
   };
 
@@ -39,106 +55,57 @@ export const MainPage: React.FC = () => {
       "notifications": [{"title": "", "message": ""}]
     }
   });
-  const { control, getValues, formState, trigger } = formHook;
-  const { fields, append, remove } = useFieldArray({
-    control, // control props comes from useForm (optional: if you are using FormContext)
-    name: "notifications", // unique name for your Field Array
-  });
-  
-  const handleAddRow = () => {
-    append({"title": "", "message": ""});
-  }
-  const handleDeleteRow = (index: number) => {
-    if (fields.length > 1) {
-      remove(index);
-    }
-  }
-  
+  const { getValues, formState } = formHook;
+  const { isValid } = formState;
+
+  const pushMessage = push.bind(null, userID, company);
+
+  // user can only progress towards towards the next step if previous step is completed, and when certain conditions are fulfilled
+  useEffect(() => {
+    const stepsCopy = cloneDeep(steps);
+    stepsCopy[1] = stepsCopy[0] && permission === "granted";
+    stepsCopy[2] = stepsCopy[1] && isSubscribed;
+    stepsCopy[3] = stepsCopy[2];
+    setSteps(stepsCopy);
+  }, [permission]);
+
   const onSubmit = async() => {
-    const isValid = await trigger();
     if (!isValid) {
       console.log("errors detected");
       return;
     }
     
     const {notifications} = getValues();
-    const url = "http://localhost:7071/api/notifications";
 
-    for (const notify of notifications) {
-      console.log("sleeping for 2.5 sec...");
-      await sleep(2500);
+    for (let i = 0; i < notifications.length; i++) {
+      const notify: Notify = notifications[i];
+      const sleepDuration = i > 0 ? 2500 : 0;
+      console.log(`sleeping for ${sleepDuration}`);
+      await sleep(sleepDuration);
+
       try {
-        const result = await axios.post(url, {
-          "userID": fakeUser,
-          "company": fakeCompany,
-          "notification": {
-              "title": notify.title,
-              "body": notify.message,
-              "icon": "My icon"
-          }
-        });
+        const result = await pushMessage(notify.title, notify.message);
         console.log(result);
       } catch (err) {
         console.error(err);
       }
-    }   
+    }
   }
-
-  const buttonTextDict: Record<NotificationPermission , string> = {
-    "granted": "Granted ✔️",
-    "default": "Allow",
-    "denied": "Blocked ❌"
-  };
-
-  const hasSubscribed: boolean = localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_USERID) != null && localStorage.getItem(CREDENTIAL.BROWSER_NOTIFY_UI_COMPANY) != null;
 
   return (
     <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>
-        <section className="flex flex-col items-center">
-          <h1 className='text-xl text-white font-bold text-center'>1. Grant permission</h1>
-          <Button className='mt-2' 
-            handleClick={handleRequestPermission}>
-              {buttonTextDict[permission as NotificationPermission]}
-          </Button>
-          {permission === "denied" &&
-            <Instruction />
-          }
-        </section>        
-      {permission === "granted" &&
-        <>
-        <section className="flex flex-col items-center mt-10">
-          <h1 className='text-xl text-white font-bold text-center'>2. Subscribe</h1>
-          <Button className='mt-2' 
-            handleClick={handleSubscribe}>
-              {hasSubscribed ? "Subscribed ✔️" : "Subscribe"}          
-          </Button>          
-      </section>      
-        <section>
-          <h1 className='text-xl text-white font-bold mt-10 text-center'>3. Create notifications</h1>
-          <div className='mt-2'>
-            <div className='flex flex-col' >
-              {fields.map((field, index) => (
-                <div className="flex flex-col items-center" key={index}>
-                  <Row formHook={formHook} field={field} index={index} handleDeleteRow={handleDeleteRow} key={field.id}/>
-                </div>
-              ))}
-            </div>
-            <Button className='mt-2' 
-              handleClick={handleAddRow}>➕
-            </Button>
-          </div>
-          </section>
-          <section>
-            <h1 className='text-xl text-white font-bold mt-10 text-center'>3. Send!</h1>
-
-              <div className="flex flex-row justify-center mt-2">
-                <Button className='mt-2 font-bold px-10 py-5' 
-                  handleClick={onSubmit}>Send
-                </Button>
-              </div>
-          </section>
-        </>
+      {steps[0] &&
+        <PermissionSection permission={permission} handlePermission={handlePermission} />
       }
+      {steps[1] &&
+        <SubscribeSection handleSubscribe={handleSubscribe} />   
+      }      
+      {steps[2] &&
+        <FormSection formHook={formHook}/>
+      }    
+      {steps[3] &&
+        <PushSection onSubmit={onSubmit}/>
+      } 
     </div>
   );
 }
