@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { subscribe, requestPermission, pushMessage, broadcast } from '@browser-notify-ui/service-workers';
+import {
+  subscribe,
+  requestPermission,
+  pushMessage,
+  broadcast,
+} from "@browser-notify-ui/service-workers";
 import { useLocalStorage, usePermission } from "~/hooks";
 import { useForm } from "react-hook-form";
 import { generateUserID, generateCompany, sleep } from "./util";
@@ -18,36 +23,45 @@ type FormValues = {
 };
 
 export const MainPage: React.FC = () => {
-
   // Get credentials from local storage. Otherwise, generate new credentials
   const userID = generateUserID();
   const company = generateCompany();
-  
+
   // Get the user's permission to display notification
   const [permission, setPermission] = usePermission();
-  const handlePermission = async() => {
+  const handlePermission = async () => {
     const perm: NotificationPermission = await requestPermission();
     setPermission(perm);
-  }
+  };
 
   // Subscribe the user to our web push notification service
-  const [subQueryStatus, makeSubQuery] = useHttpQuery(subscribe.bind(null, company, userID));
+  const [subQueryStatus, makeSubQuery] = useHttpQuery(
+    subscribe.bind(null, company, userID)
+  );
   const handleSubscribe = (): Promise<void> => makeSubQuery(company, userID);
   useEffect(() => {
     if (subQueryStatus === QUERY_STATUS.SUCCESS) {
-      localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, true.toString());
+      localStorage.setItem(
+        CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED,
+        true.toString()
+      );
       // need to manually dispatch the storage event, because, by default,
       // the storage event only get picked up (by the listener) if the localStorage was changed in a different browser's tab/window (of the same app)
       window.dispatchEvent(new Event("storage"));
     } else if (subQueryStatus === QUERY_STATUS.ERROR) {
-      localStorage.setItem(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED, false.toString());
+      localStorage.setItem(
+        CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED,
+        false.toString()
+      );
       window.dispatchEvent(new Event("storage"));
     }
-  }, [subQueryStatus]);  
+  }, [subQueryStatus]);
 
   // Check whether user has already subscribed by checking the local storage cache
   // If so, they can progress to the next few steps without having to subscribe again
-  const [_isSubscribed] = useLocalStorage(CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED);
+  const [_isSubscribed] = useLocalStorage(
+    CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED
+  );
   const isSubscribed: boolean = _isSubscribed === "true";
 
   // Progress Stepper
@@ -72,23 +86,26 @@ export const MainPage: React.FC = () => {
   const formHook = useForm<FormValues>({
     mode: "onBlur",
     defaultValues: {
-      "notifications": [{"title": "", "message": ""}]
-    }
+      notifications: [{ title: "", message: "" }],
+    },
   });
   const { getValues, formState } = formHook;
   const { isValid } = formState;
 
   // When the user submits the form, we add a delay in between the notification messages submitted
-  const [_, makePushQuery] = useHttpQuery(pushMessage.bind(null, userID, company));   // bind and fix the credentials arguments as they remain the same
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, makePushQuery] = useHttpQuery(
+    pushMessage.bind(null, userID, company)
+  ); // bind and fix the credentials arguments as they remain the same
   const [isPushLoading, setPushLoading] = useState(false);
-  const onSubmit = async() => {
+  const onSubmit = async () => {
     if (!isValid) {
       console.log("errors detected");
       return;
     }
     setPushLoading(true);
 
-    const {notifications} = getValues();
+    const { notifications } = getValues();
     for (let i = 0; i < notifications.length; i++) {
       const notify: Notify = notifications[i];
       const sleepDuration = i > 0 ? 2000 : 0;
@@ -103,14 +120,16 @@ export const MainPage: React.FC = () => {
         console.error(err);
       }
     }
-  }
+  };
 
   useEffect(() => {
     broadcast.onmessage = (event) => {
-      if (event.data!= null) {
+      if (event.data != null) {
         const data = event.data as Record<string, string>;
         if (data["type"] === "BROSWER_NOTIFY_UI") {
-          console.log(`message detected: ${(new Date()).getSeconds()}.${(new Date()).getMilliseconds()}s`);
+          console.log(
+            `message detected: ${new Date().getSeconds()}.${new Date().getMilliseconds()}s`
+          );
           setPushLoading(false);
         }
       }
@@ -118,25 +137,36 @@ export const MainPage: React.FC = () => {
   }, []);
 
   return (
-    <div className='flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0'>
-      {steps[0] &&
-        <PermissionSection permission={permission} handlePermission={handlePermission} />
-      }
-      {steps[1] &&
-      <>
-          <SubscribeSection handleSubscribe={handleSubscribe} />   
-          <BarLoader loading={subQueryStatus === QUERY_STATUS.LOADING} width={200} className="mt-2" color={"#FFFFFF"}/>
-      </>
-      }      
-      {steps[2] &&
-        <FormSection formHook={formHook}/>
-      }    
-      {steps[3] &&
-      <>
-        <PushSection onSubmit={onSubmit}/>
-        <BarLoader loading={isPushLoading} width={200} className="mt-2" color={"#FFFFFF"}/>
-      </>
-      } 
+    <div className="flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0">
+      {steps[0] && (
+        <PermissionSection
+          permission={permission}
+          handlePermission={handlePermission}
+        />
+      )}
+      {steps[1] && (
+        <>
+          <SubscribeSection handleSubscribe={handleSubscribe} />
+          <BarLoader
+            loading={subQueryStatus === QUERY_STATUS.LOADING}
+            width={200}
+            className="mt-2"
+            color={"#FFFFFF"}
+          />
+        </>
+      )}
+      {steps[2] && <FormSection formHook={formHook} />}
+      {steps[3] && (
+        <>
+          <PushSection onSubmit={onSubmit} />
+          <BarLoader
+            loading={isPushLoading}
+            width={200}
+            className="mt-2"
+            color={"#FFFFFF"}
+          />
+        </>
+      )}
     </div>
   );
-}
+};

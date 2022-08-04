@@ -1,1 +1,1 @@
-export {SubscribeSection} from "./subscribe-section";
+export { SubscribeSection } from "./subscribe-section";
