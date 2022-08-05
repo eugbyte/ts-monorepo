@@ -7,7 +7,7 @@ import {
 } from "@browser-notify-ui/service-workers";
 import { usePermission } from "~/hooks/permission";
 import { useForm } from "react-hook-form";
-import { generateUserID, generateCompany, sleep } from "~/libs/util";
+import { sleep } from "~/libs/util";
 import { Notify } from "~/models/Notify";
 import { PermissionSection } from "~/components/sections/section1";
 import { SubscribeSection } from "~/components/sections/section2";
@@ -18,6 +18,7 @@ import { CREDENTIAL, QUERY_STATUS } from "~/models/enums";
 import { BarLoader } from "react-spinners";
 import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
+import { generateCompany, generateUserID } from "~/libs/credentials";
 
 type FormValues = {
   notifications: Notify[];
