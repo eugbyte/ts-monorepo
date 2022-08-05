@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { QUERY_STATUS } from "~/models/enums";
 
-// TO DO - fix the typing to use generics, e.g.  <T>(...args: T[]) => Promise<T>;
-type QueryFn = <T>(...args: any[]) => Promise<any>;
+
+// TO DO - fix the typing to use generics of arguments of any type
+// e.g.  <T extends any[]>(...args: T[]) => Promise<T>;
+type QueryFn = (...args: any) => Promise<any>;
 
 // accepts the query function that makes the http call
 // return the query status (Uninitialized, loading, success, error),

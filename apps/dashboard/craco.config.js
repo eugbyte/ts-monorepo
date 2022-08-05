@@ -22,5 +22,13 @@ module.exports = {
       }
       return webpackConfig;
     }
+  },
+  jest: {
+    configure: {
+      preset: 'ts-jest',
+      moduleNameMapper: {
+        "~/(.*)": "<rootDir>/src/$1"
+      },
+    },
   }
 };
