@@ -25,7 +25,6 @@ type FormValues = {
 };
 
 export const MainPage: React.FC = () => {
-  
   // Get the user's permission to display notification
   const [permission, setPermission] = usePermission();
   const handlePermission = async () => {

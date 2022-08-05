@@ -1,1 +1,1 @@
-export {generateCompany, generateUserID} from "./generate-credentials";
+export { generateCompany, generateUserID } from "./generate-credentials";
