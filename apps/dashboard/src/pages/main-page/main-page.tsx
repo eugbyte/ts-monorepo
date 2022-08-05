@@ -143,7 +143,7 @@ export const MainPage: React.FC = () => {
       )}
       {steps[1] && (
         <>
-          <SubscribeSection handleSubscribe={handleSubscribe} />
+          <SubscribeSection handleSubscribe={handleSubscribe} isSubscribed={isSubscribed} />
           <BarLoader
             loading={subQueryStatus === QUERY_STATUS.LOADING}
             width={200}

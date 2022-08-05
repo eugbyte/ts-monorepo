@@ -4,9 +4,9 @@ import { SubscribeSection } from "./subscribe-section";
 
 describe("test section2", () => {
   it("'Subscribed ✔️' text should be displayed when user has already subscribed", () => {
-    jest.spyOn(localStorage, "getItem").mockReturnValueOnce("true");
+    const isSubscribed = true;
     const mockHandleSubscribe = () => Promise.resolve();
-    render(<SubscribeSection handleSubscribe={mockHandleSubscribe} />);
+    render(<SubscribeSection handleSubscribe={mockHandleSubscribe} isSubscribed={isSubscribed} />);
     expect(screen.getByText("Subscribed ✔️")).toBeInTheDocument();
   });
 });
