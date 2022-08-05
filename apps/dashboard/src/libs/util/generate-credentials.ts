@@ -19,6 +19,3 @@ export const generateUserID = (): string => {
   }
   return userID;
 };
-
-export const sleep = (time: number) =>
-  new Promise((resolve) => setTimeout(resolve, time));
