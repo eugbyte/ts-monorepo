@@ -1,26 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
+// Get item from local storage, or return an empty string as default value
 // Detects whether changes have been made to the specified local storage item
-// note that the storage event only get picked up (by the listener) if the localStorage was changed in another browser's tab/window (of the same app),
-// but not within the context of the current tab
-// so, as a workaround, need to manually trigger the event with window.dispatchEvent(new Event("storage"));
+// note that useEffect(() => {}, [localStorage]) does nto work, since we are manipulating the actual windows object directly instead of the virtual dom
+// so, as a workaround, duplicate the local storage state
 export const useLocalStorage = (
   itemName: string
 ): [string, (item: string) => void] => {
   const [item, setItem] = useState<string>(
     localStorage.getItem(itemName) || ""
   );
-
-  const handleSetItem = () => {
-    console.log("storage changed");
-    const _item = localStorage.getItem(itemName) || "";
-    setItem(_item);
+  const handleSetItem = (itemValue: string) => {
+    localStorage.setItem(itemName, itemValue);
+    setItem(itemValue);
   };
 
+  // to cater for cases where local storage is manipulated directly instead of through the hook
+  const handleManualChange = () => {
+    setItem(localStorage.getItem(itemName) || "");
+  };
   useEffect(() => {
-    window.addEventListener("storage", handleSetItem);
-    return () => window.removeEventListener("storage", handleSetItem);
+    window.addEventListener("storage", () => handleManualChange);
+    return () => window.removeEventListener("storage", handleManualChange);
   }, []);
 
-  return [item, setItem];
+  return [item, handleSetItem];
 };
