@@ -47,14 +47,14 @@ export const MainPage: React.FC = () => {
     let newUserID = userID;
     let newCompany = company;
     if (newUserID === "") {
-      newUserID = faker.company.companyName();
+      newUserID = `${nanoid()}_${faker.internet.email()}`;
       setUserId(newUserID);
     }
     if (newCompany === "") {
-      newCompany = `${nanoid()}_${faker.internet.email()}`;
+      newCompany =  faker.company.companyName();
       setCompany(newCompany);
     }
-    await makeSubQuery(company, userID);
+    await makeSubQuery(newCompany, newUserID);
   };
 
   // Check whether user has already subscribed by checking the local storage cache
@@ -63,14 +63,12 @@ export const MainPage: React.FC = () => {
 
   // Progress Stepper
   // user can only progress towards towards the next step if previous step is completed, and when certain conditions are fulfilled
-  // user can only progress towards towards the next step if certain conditions are fulfilled
   const [steps, setSteps] = useState<Record<number, boolean>>({
     0: true,
     1: false,
     2: false,
     3: false,
   });
-
   useEffect(() => {
     const stepsCopy = cloneDeep(steps);
     stepsCopy[1] = stepsCopy[0] && permission === "granted";
