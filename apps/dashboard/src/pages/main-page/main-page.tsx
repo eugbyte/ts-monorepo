@@ -7,7 +7,6 @@ import {
 } from "@browser-notify-ui/service-workers";
 import { usePermission } from "~/hooks/permission";
 import { useForm } from "react-hook-form";
-import { sleep } from "~/libs/util";
 import { Notify } from "~/models/Notify";
 import { PermissionSection } from "~/components/sections/section1";
 import { SubscribeSection } from "~/components/sections/section2";
@@ -18,7 +17,9 @@ import { CREDENTIAL, QUERY_STATUS } from "~/models/enums";
 import { BarLoader } from "react-spinners";
 import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
-import { generateCompany, generateUserID } from "~/libs/credentials";
+import { sleep } from "@browser-notify-ui/utils";
+import { nanoid } from "nanoid";
+import { faker } from "@faker-js/faker";
 
 type FormValues = {
   notifications: Notify[];
@@ -32,39 +33,33 @@ export const MainPage: React.FC = () => {
     setPermission(perm);
   };
 
-  // Get credentials from local storage. Otherwise, generate new credentials
-  const userID = generateUserID();
-  const company = generateCompany();
+  // Get mocked credentials from local storage. Defaults to ""
+  const [userID, setUserId] = useLocalStorage(
+    CREDENTIAL.BROWSER_NOTIFY_UI_USERID
+  );
+  const [company, setCompany] = useLocalStorage(
+    CREDENTIAL.BROWSER_NOTIFY_UI_COMPANY
+  );
 
   // Subscribe the user to our web push notification service
-  const [subQueryStatus, makeSubQuery] = useHttpQuery(
-    subscribe.bind(null, company, userID)
-  );
-  const handleSubscribe = (): Promise<void> => makeSubQuery(company, userID);
-  useEffect(() => {
-    if (subQueryStatus === QUERY_STATUS.SUCCESS) {
-      localStorage.setItem(
-        CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED,
-        true.toString()
-      );
-      // need to manually dispatch the storage event, because, by default,
-      // the storage event only get picked up (by the listener) if the localStorage was changed in a different browser's tab/window (of the same app)
-      window.dispatchEvent(new Event("storage"));
-    } else if (subQueryStatus === QUERY_STATUS.ERROR) {
-      localStorage.setItem(
-        CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED,
-        false.toString()
-      );
-      window.dispatchEvent(new Event("storage"));
+  const [subQueryStatus, makeSubQuery] = useHttpQuery(subscribe.bind(null));
+  const handleSubscribe = async (): Promise<void> => {
+    let newUserID = userID;
+    let newCompany = company;
+    if (newUserID === "") {
+      newUserID = faker.company.companyName();
+      setUserId(newUserID);
     }
-  }, [subQueryStatus]);
+    if (newCompany === "") {
+      newCompany = `${nanoid()}_${faker.internet.email()}`;
+      setCompany(newCompany);
+    }
+    await makeSubQuery(company, userID);
+  };
 
   // Check whether user has already subscribed by checking the local storage cache
   // If so, they can progress to the next few steps without having to subscribe again
-  const [_isSubscribed] = useLocalStorage(
-    CREDENTIAL.BROWSER_NOTIFY_UI_SUBSCRIBED
-  );
-  const isSubscribed: boolean = _isSubscribed === "true";
+  const isSubscribed = userID !== "" && company !== "";
 
   // Progress Stepper
   // user can only progress towards towards the next step if previous step is completed, and when certain conditions are fulfilled
@@ -102,7 +97,7 @@ export const MainPage: React.FC = () => {
   const [isPushLoading, setPushLoading] = useState(false);
   const onSubmit = async () => {
     if (!isValid) {
-      console.log("errors detected");
+      console.error("errors in the form detected");
       return;
     }
     setPushLoading(true);
