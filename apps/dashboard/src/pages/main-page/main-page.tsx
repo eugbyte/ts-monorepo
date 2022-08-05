@@ -25,16 +25,17 @@ type FormValues = {
 };
 
 export const MainPage: React.FC = () => {
-  // Get credentials from local storage. Otherwise, generate new credentials
-  const userID = generateUserID();
-  const company = generateCompany();
-
+  
   // Get the user's permission to display notification
   const [permission, setPermission] = usePermission();
   const handlePermission = async () => {
     const perm: NotificationPermission = await requestPermission();
     setPermission(perm);
   };
+
+  // Get credentials from local storage. Otherwise, generate new credentials
+  const userID = generateUserID();
+  const company = generateCompany();
 
   // Subscribe the user to our web push notification service
   const [subQueryStatus, makeSubQuery] = useHttpQuery(
