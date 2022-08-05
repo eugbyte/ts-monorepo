@@ -104,7 +104,6 @@ export const MainPage: React.FC = () => {
     for (let i = 0; i < notifications.length; i++) {
       const notify: Notify = notifications[i];
       const sleepDuration = i > 0 ? 2000 : 0;
-      console.log(`sleeping for ${sleepDuration}`);
       await sleep(sleepDuration);
 
       try {
