@@ -5,7 +5,7 @@ import {
   pushMessage,
   broadcast,
 } from "@browser-notify-ui/service-workers";
-import { useLocalStorage, usePermission } from "~/hooks";
+import { usePermission } from "~/hooks/permission";
 import { useForm } from "react-hook-form";
 import { generateUserID, generateCompany, sleep } from "./util";
 import { Notify } from "~/models/Notify";
@@ -16,7 +16,8 @@ import { PushSection } from "~/components/sections/section4";
 import cloneDeep from "lodash.clonedeep";
 import { CREDENTIAL, QUERY_STATUS } from "~/models/enums";
 import { BarLoader } from "react-spinners";
-import { useHttpQuery } from "~/hooks";
+import { useHttpQuery } from "~/hooks/http-query";
+import { useLocalStorage } from "~/hooks/local-storage";
 
 type FormValues = {
   notifications: Notify[];

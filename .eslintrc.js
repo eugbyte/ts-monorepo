@@ -24,6 +24,7 @@ module.exports = {
       'postcss.config.js', 
       'tailwind.config.js', 
       'serviceWorkerRegistration.ts', 
-      'service-worker.ts'
+      'service-worker.ts',
+      'jest.config.js',
     ]
 };

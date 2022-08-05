@@ -15,9 +15,7 @@ describe("test section1", () => {
 
     expect(screen.getByText("Blocked ❌")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "You have blocked notifications from the website"
-      )
+      screen.getByText("You have blocked notifications from the website")
     ).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
 import { Button } from "@browser-notify-ui/components";
 import React from "react";
-import { useLocalStorage } from "~/hooks";
+import { useLocalStorage } from "~/hooks/local-storage";
 import { CREDENTIAL } from "~/models/enums";
 
 interface Props {
