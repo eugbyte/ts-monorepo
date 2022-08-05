@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
+    "broadcast-channel": "^4.14.0",
     "webextension-polyfill": "^0.9.0"
   },
   "devDependencies": {

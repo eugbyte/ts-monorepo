@@ -51,7 +51,7 @@ export const MainPage: React.FC = () => {
       setUserId(newUserID);
     }
     if (newCompany === "") {
-      newCompany =  faker.company.companyName();
+      newCompany = faker.company.companyName();
       setCompany(newCompany);
     }
     await makeSubQuery(newCompany, newUserID);
@@ -117,7 +117,7 @@ export const MainPage: React.FC = () => {
   };
 
   useEffect(() => {
-    broadcast.onmessage = (event) => {
+    broadcast.onmessage = (event: MessageEvent<any>) => {
       if (event.data != null) {
         const data = event.data as Record<string, string>;
         if (data["type"] === "BROSWER_NOTIFY_UI") {
@@ -140,7 +140,10 @@ export const MainPage: React.FC = () => {
       )}
       {steps[1] && (
         <>
-          <SubscribeSection handleSubscribe={handleSubscribe} isSubscribed={isSubscribed} />
+          <SubscribeSection
+            handleSubscribe={handleSubscribe}
+            isSubscribed={isSubscribed}
+          />
           <BarLoader
             loading={subQueryStatus === QUERY_STATUS.LOADING}
             width={200}
