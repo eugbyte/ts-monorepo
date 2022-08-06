@@ -2,11 +2,7 @@ import { Button } from "@browser-notify-ui/components";
 import React from "react";
 import { useFieldArray, UseFormReturn } from "react-hook-form";
 import { Row } from "./row";
-import { Notify } from "~/models/Notify";
-
-type FormValues = {
-  notifications: Notify[];
-};
+import { FormValues } from "~/models/Notify";
 
 interface Props {
   formHook: UseFormReturn<FormValues, any>;

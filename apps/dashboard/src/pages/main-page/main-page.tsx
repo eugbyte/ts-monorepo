@@ -7,7 +7,7 @@ import {
 } from "@browser-notify-ui/service-workers";
 import { usePermission } from "~/hooks/permission";
 import { useForm } from "react-hook-form";
-import { Notify } from "~/models/Notify";
+import { FormValues } from "~/models/Notify";
 import { PermissionSection } from "~/components/sections/section1";
 import { SubscribeSection } from "~/components/sections/section2";
 import { FormSection } from "~/components/sections/section3";
@@ -19,10 +19,6 @@ import { useLocalStorage } from "~/hooks/local-storage";
 import { sleep } from "@browser-notify-ui/utils";
 import { nanoid } from "nanoid";
 import { faker } from "@faker-js/faker";
-
-type FormValues = {
-  notifications: Notify[];
-};
 
 export const MainPage: React.FC = () => {
   // Get the user's permission to display notification
@@ -93,6 +89,8 @@ export const MainPage: React.FC = () => {
   const [_, makePushQuery] = useHttpQuery(
     pushMessage.bind(null, userID, company)
   ); // bind and fix the credentials arguments as they remain the same
+
+  // State to listen to whether the first notification has been received
   const [isPendingNotify, setPendingNotify] = useState(false);
   const onSubmit = async () => {
     if (!isValid) {
@@ -103,12 +101,12 @@ export const MainPage: React.FC = () => {
 
     const { notifications } = getValues();
     for (let i = 0; i < notifications.length; i++) {
-      const notify: Notify = notifications[i];
+      const { title, message } = notifications[i];
       const sleepDuration = i > 0 ? 2000 : 0;
       await sleep(sleepDuration);
 
       try {
-        const result = await makePushQuery(notify.title, notify.message);
+        const result = await makePushQuery(title, message);
         console.log(result);
       } catch (err) {
         setPendingNotify(false);
