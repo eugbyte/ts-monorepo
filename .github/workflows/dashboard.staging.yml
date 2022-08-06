@@ -28,6 +28,6 @@ jobs:
       - name: Install node modules
         run: npm ci
       - name: Run unit tests
-        run: npm --workspace=@browser-notify-ui/dashboard run test -- --watchAll=false
+        run: CI=true npm --workspace=@browser-notify-ui/dashboard run test -- --watchAll=false
       - name: Run lint
         run: npm --workspace=@browser-notify-ui/dashboard run lint:fix 
