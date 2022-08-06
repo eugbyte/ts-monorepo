@@ -30,6 +30,6 @@ jobs:
       - name: Run unit tests
         run: npm --workspace=@browser-notify-ui/dashboard run test -- --watchAll=false
         env:
-          CI=true 
+          CI: true 
       - name: Run lint
         run: npm --workspace=@browser-notify-ui/dashboard run lint:fix 
