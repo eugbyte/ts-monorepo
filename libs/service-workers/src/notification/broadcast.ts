@@ -1,8 +1,13 @@
-import { BroadcastChannel } from "broadcast-channel";
-export const broadcast =
-  process.env.NODE_ENV === "test"
-    ? new BroadcastChannel("BROSWER_NOTIFY_UI", {
-        type: "native",
-        webWorkerSupport: true,
-      })
-    : new window.BroadcastChannel("BROSWER_NOTIFY_UI");
+import { BroadcastChannel as PolyFilledBroadcastChannel } from "broadcast-channel";
+
+let broadcast: BroadcastChannel;
+if ("BroadcastChannel" in window) {
+  broadcast = new BroadcastChannel("BROSWER_NOTIFY_UI");
+} else {
+  broadcast = new PolyFilledBroadcastChannel("BROSWER_NOTIFY_UI", {
+    type: "native",
+    webWorkerSupport: true,
+  }) as any;
+}
+
+export { broadcast };
