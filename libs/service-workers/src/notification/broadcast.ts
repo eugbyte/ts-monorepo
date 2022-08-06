@@ -1,13 +1,15 @@
 import { BroadcastChannel as PolyFilledBroadcastChannel } from "broadcast-channel";
 
-let broadcast: BroadcastChannel;
-if ("BroadcastChannel" in window) {
-  console.log("browser supports BroadcastChannel");
-  broadcast = new BroadcastChannel("BROSWER_NOTIFY_UI");
-} else {
-  broadcast = new PolyFilledBroadcastChannel("BROSWER_NOTIFY_UI", {
-    webWorkerSupport: true,
-  }) as any;
+const broadcastName = "BROSWER_NOTIFY_UI";
+
+// for some reason, if an if else statement is used, 
+// e.g. window.BroadcastChannel != null ? new BroadcastChannel(broadcastName) : new PolyFilledBroadcastChannel(broadcastName)
+// the service worker scripter evaluation fails
+let broadcast: BroadcastChannel
+try {
+  broadcast = new BroadcastChannel(broadcastName)
+} catch (err) {
+  broadcast = (new PolyFilledBroadcastChannel(broadcastName) as any);
 }
 
-export { broadcast };
+export {broadcast}

@@ -17,17 +17,24 @@ export const PushSection: React.FC<Props> = ({
         4. Send!
       </h1>
 
-      <div className="flex flex-row justify-center mt-2">
+      <div className="flex flex-row justify-center my-2">
         <Button className="mt-2 font-bold px-10 py-5" handleClick={onSubmit}>
           Send
         </Button>
       </div>
-      <BarLoader
-        loading={isPendingNotification}
-        width={200}
-        className="mt-2"
-        color={"#FFFFFF"}
-      />
+      <div>
+        {isPendingNotification && (
+          <p className="text-white text-center text-xs">
+            This might take a while ...
+          </p>
+        )}
+        <BarLoader
+          loading={isPendingNotification}
+          width={200}
+          className="mt-2"
+          color={"#FFFFFF"}
+        />
+      </div>
     </section>
   );
 };
