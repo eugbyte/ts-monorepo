@@ -27,15 +27,15 @@ describe("test form section", () => {
     inputs = screen.getAllByRole("textbox");
     expect(inputs.length).toBe(4);
 
-    const deleteButton = screen.getByRole("button", {
+    const deleteButtons: HTMLElement[] = screen.getAllByRole("button", {
       name: /➖/i,
     });
-    fireEvent(deleteButton, new MouseEvent("click", { bubbles: true }));
+    fireEvent(deleteButtons[1], new MouseEvent("click", { bubbles: true }));
     inputs = screen.getAllByRole("textbox");
-    expect(inputs.length).toBe(4);
+    expect(inputs.length).toBe(2);
   });
 
-  it("if only one row left, cannot delete", () => {
+  it("if only one row left, cannot delete that row", () => {
     render(<TestContainer />);
     let inputs = screen.getAllByRole("textbox");
     expect(inputs.length).toBe(2);
