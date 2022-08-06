@@ -1,11 +1,16 @@
 import { Button } from "@browser-notify-ui/components";
 import React from "react";
+import { BarLoader } from "react-spinners";
 
 interface Props {
   onSubmit: () => Promise<void>;
+  isPendingNotification: boolean;
 }
 
-export const PushSection: React.FC<Props> = ({ onSubmit }) => {
+export const PushSection: React.FC<Props> = ({
+  onSubmit,
+  isPendingNotification,
+}) => {
   return (
     <section>
       <h1 className="text-xl text-white font-bold mt-10 text-center">
@@ -17,6 +22,12 @@ export const PushSection: React.FC<Props> = ({ onSubmit }) => {
           Send
         </Button>
       </div>
+      <BarLoader
+        loading={isPendingNotification}
+        width={200}
+        className="mt-2"
+        color={"#FFFFFF"}
+      />
     </section>
   );
 };

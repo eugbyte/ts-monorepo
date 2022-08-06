@@ -13,8 +13,7 @@ import { SubscribeSection } from "~/components/sections/section2";
 import { FormSection } from "~/components/sections/section3";
 import { PushSection } from "~/components/sections/section4";
 import cloneDeep from "lodash.clonedeep";
-import { CREDENTIAL, QUERY_STATUS } from "~/models/enums";
-import { BarLoader } from "react-spinners";
+import { CREDENTIAL } from "~/models/enums";
 import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
 import { sleep } from "@browser-notify-ui/utils";
@@ -84,21 +83,23 @@ export const MainPage: React.FC = () => {
       notifications: [{ title: "", message: "" }],
     },
   });
-  const { getValues, formState } = formHook;
-  const { isValid } = formState;
+  const {
+    getValues,
+    formState: { isValid },
+  } = formHook;
 
   // When the user submits the form, we add a delay in between the notification messages submitted
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, makePushQuery] = useHttpQuery(
     pushMessage.bind(null, userID, company)
   ); // bind and fix the credentials arguments as they remain the same
-  const [isPushLoading, setPushLoading] = useState(false);
+  const [isPendingNotify, setPendingNotify] = useState(false);
   const onSubmit = async () => {
     if (!isValid) {
       console.error("errors in the form detected");
       return;
     }
-    setPushLoading(true);
+    setPendingNotify(true);
 
     const { notifications } = getValues();
     for (let i = 0; i < notifications.length; i++) {
@@ -110,7 +111,7 @@ export const MainPage: React.FC = () => {
         const result = await makePushQuery(notify.title, notify.message);
         console.log(result);
       } catch (err) {
-        setPushLoading(false);
+        setPendingNotify(false);
         console.error(err);
       }
     }
@@ -124,7 +125,7 @@ export const MainPage: React.FC = () => {
           console.log(
             `message detected: ${new Date().getSeconds()}.${new Date().getMilliseconds()}s`
           );
-          setPushLoading(false);
+          setPendingNotify(false);
         }
       }
     };
@@ -139,30 +140,18 @@ export const MainPage: React.FC = () => {
         />
       )}
       {steps[1] && (
-        <>
-          <SubscribeSection
-            handleSubscribe={handleSubscribe}
-            isSubscribed={isSubscribed}
-          />
-          <BarLoader
-            loading={subQueryStatus === QUERY_STATUS.LOADING}
-            width={200}
-            className="mt-2"
-            color={"#FFFFFF"}
-          />
-        </>
+        <SubscribeSection
+          handleSubscribe={handleSubscribe}
+          isSubscribed={isSubscribed}
+          subscriptionQueryStatus={subQueryStatus}
+        />
       )}
       {steps[2] && <FormSection formHook={formHook} />}
       {steps[3] && (
-        <>
-          <PushSection onSubmit={onSubmit} />
-          <BarLoader
-            loading={isPushLoading}
-            width={200}
-            className="mt-2"
-            color={"#FFFFFF"}
-          />
-        </>
+        <PushSection
+          onSubmit={onSubmit}
+          isPendingNotification={isPendingNotify}
+        />
       )}
     </div>
   );
