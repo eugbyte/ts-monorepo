@@ -41,7 +41,7 @@ export const MainPage: React.FC = () => {
     let newUserID = userID;
     let newCompany = company;
 
-    // faker.js is causing the jest test to not exit
+    // faker.js is causing the jest test to not exit, using nanoid instead
     if (newUserID === "") {
       newUserID = `${nanoid}_@mail.com`;
       setUserId(newUserID);
