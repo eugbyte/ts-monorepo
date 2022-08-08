@@ -28,7 +28,7 @@ jobs:
       - name: Install node modules
         run: npm ci
       - name: Run unit tests
-        run: npm --workspace=@browser-notify-ui/dashboard run test  --watchAll=false --forceExit
+        run: npm --workspace=@browser-notify-ui/dashboard run test:ci
         env:
           CI: true 
       - name: Run lint
