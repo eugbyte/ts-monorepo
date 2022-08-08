@@ -18,7 +18,6 @@ import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
 import { sleep } from "@browser-notify-ui/utils";
 import { nanoid } from "nanoid";
-import { faker } from "@faker-js/faker";
 
 export const MainPage: React.FC = () => {
   // Get the user's permission to display notification
@@ -41,12 +40,14 @@ export const MainPage: React.FC = () => {
   const handleSubscribe = async (): Promise<void> => {
     let newUserID = userID;
     let newCompany = company;
+
+    // faker.js is causing the jest test to not exit
     if (newUserID === "") {
-      newUserID = `${nanoid()}_${faker.internet.email()}`;
+      newUserID = `${nanoid}_@mail.com`;
       setUserId(newUserID);
     }
     if (newCompany === "") {
-      newCompany = faker.company.companyName();
+      newCompany = `${nanoid}_company`;
       setCompany(newCompany);
     }
     await makeSubQuery(newCompany, newUserID);
@@ -70,7 +71,7 @@ export const MainPage: React.FC = () => {
     stepsCopy[2] = stepsCopy[1] && isSubscribed;
     stepsCopy[3] = stepsCopy[2];
     setSteps(stepsCopy);
-  }, [permission, isSubscribed]);
+  }, [steps[0], permission, isSubscribed]);
 
   // Dynamic Form to add and subtract rows containing the notification message info
   const formHook = useForm<FormValues>({
@@ -127,6 +128,7 @@ export const MainPage: React.FC = () => {
         }
       }
     };
+    return () => broadcast.close();
   }, []);
 
   return (
