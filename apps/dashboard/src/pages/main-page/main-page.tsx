@@ -128,13 +128,9 @@ export const MainPage: React.FC = () => {
         }
       }
     };
-    return () => {
-      // apparently, this clean up runs at least once even before the component dismounts,
-      // thereby permanently closing the channel
-      // comment out for now
-      // console.log("cleaning up");
-      // broadcast.close();
-    };
+    // apparently, this clean up runs at least once even before the component dismounts,
+    // thereby permanently closing the channel
+    // return () => broadcast.close();  // comment out for now
   }, []);
 
   return (

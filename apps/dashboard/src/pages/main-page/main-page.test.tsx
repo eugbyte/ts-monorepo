@@ -17,8 +17,8 @@ describe("test main page", () => {
   });
 
   it("'Grant permission' title should be displayed", () => {
-    render(<MainPage />);
     console.log({ navigator: global.navigator.permissions });
+    render(<MainPage />);
     expect(screen.findByText(/Grant permission/i)).resolves.toBeInTheDocument();
   });
 });

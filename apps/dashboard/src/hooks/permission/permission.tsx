@@ -21,6 +21,10 @@ export const usePermission = (): [
     setPermission(status);
   };
 
+  if (navigator.permissions == null || navigator.permissions.query == null) {
+    return [permission, handleSetPermission];
+  }
+
   const addObserver = async () => {
     const permStatus: PermissionStatus = await navigator.permissions.query({
       name: "notifications",
@@ -39,5 +43,5 @@ export const usePermission = (): [
     return () => void removeObserver();
   }, []);
 
-  return [permission, setPermission];
+  return [permission, handleSetPermission];
 };
