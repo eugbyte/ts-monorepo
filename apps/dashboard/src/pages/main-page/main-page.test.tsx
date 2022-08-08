@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MainPage } from "./main-page";
 
-// jest.useFakeTimers();
+jest.useFakeTimers();
 // jest.spyOn(global, "setTimeout");
 
 describe("test main page", () => {
