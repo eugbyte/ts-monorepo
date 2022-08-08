@@ -43,11 +43,11 @@ export const MainPage: React.FC = () => {
 
     // faker.js is causing the jest test to not exit, using nanoid instead
     if (newUserID === "") {
-      newUserID = `${nanoid}_@mail.com`;
+      newUserID = `${nanoid(5)}_@mail.com`;
       setUserId(newUserID);
     }
     if (newCompany === "") {
-      newCompany = `${nanoid}_company`;
+      newCompany = `${nanoid(5)}_company`;
       setCompany(newCompany);
     }
     await makeSubQuery(newCompany, newUserID);
