@@ -116,6 +116,7 @@ export const MainPage: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("listening to broadcast...");
     broadcast.onmessage = (event: MessageEvent<any>) => {
       if (event.data != null) {
         const data = event.data as Record<string, string>;
@@ -127,7 +128,13 @@ export const MainPage: React.FC = () => {
         }
       }
     };
-    return () => broadcast.close();
+    return () => {
+      // apparently, this clean up runs at least once even before the component dismounts,
+      // thereby permanently closing the channel
+      // comment out for now
+      // console.log("cleaning up");
+      // broadcast.close();
+    };
   }, []);
 
   return (
