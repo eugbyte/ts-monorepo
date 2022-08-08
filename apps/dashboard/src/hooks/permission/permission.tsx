@@ -15,22 +15,10 @@ export const usePermission = (): [
   const [permission, setPermission] = useState<NotificationPermission>(
     getPermissionState()
   );
-  if (!("permissions" in navigator)) {
-    console.warn("permission not supported in navigator");
-    return [permission, setPermission];
-  }
 
-  const handleSetPermission = async () => {
-    const permStatus: PermissionStatus = await navigator.permissions.query({
-      name: "notifications",
-    });
-    const state: PermissionState = permStatus.state;
-    // PermissionState != NotificationPermission, although they have overlapping states of "denied" and "granted"
-    if (state === "prompt") {
-      setPermission("default");
-    } else {
-      setPermission(state);
-    }
+  const handleSetPermission = () => {
+    const status: NotificationPermission = getPermissionState();
+    setPermission(status);
   };
 
   const addObserver = async () => {
