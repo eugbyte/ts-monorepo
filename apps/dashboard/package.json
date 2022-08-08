@@ -41,7 +41,7 @@
     "build:sw": "bash  ./sw-dev.sh",
     "demo": "npm run build:sw && npm run start",
     "build": "rm -f 'public/service-worker.js' && craco build",
-    "test": "craco test",
+    "test": "craco test --watchAll=false --forceExit",
     "eject": "craco eject",
     "lint:fix": "eslint . --ext .js,.ts,.tsx --fix"
   },
