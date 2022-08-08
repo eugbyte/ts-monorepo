@@ -16,26 +16,26 @@ export const usePermission = (): [
     getPermissionState()
   );
 
-  const handleSetPermission = () => {
+  const onChange = () => {
     const status: NotificationPermission = getPermissionState();
     setPermission(status);
   };
 
   if (navigator.permissions == null || navigator.permissions.query == null) {
-    return [permission, handleSetPermission];
+    return [permission, setPermission];
   }
 
   const addObserver = async () => {
     const permStatus: PermissionStatus = await navigator.permissions.query({
       name: "notifications",
     });
-    permStatus.addEventListener("change", handleSetPermission);
+    permStatus.addEventListener("change", onChange);
   };
   const removeObserver = async () => {
     const permStatus: PermissionStatus = await navigator.permissions.query({
       name: "notifications",
     });
-    permStatus.removeEventListener("change", handleSetPermission);
+    permStatus.removeEventListener("change", onChange);
   };
 
   useEffect(() => {
@@ -43,5 +43,5 @@ export const usePermission = (): [
     return () => void removeObserver();
   }, []);
 
-  return [permission, handleSetPermission];
+  return [permission, setPermission];
 };
