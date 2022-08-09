@@ -15,35 +15,27 @@ export const usePermission = (): [
   const [permission, setPermission] = useState<NotificationPermission>(
     getPermissionState()
   );
-  if (!("permissions" in navigator)) {
-    console.warn("permission not supported in navigator");
+
+  const onChange = () => {
+    const status: NotificationPermission = getPermissionState();
+    setPermission(status);
+  };
+
+  if (navigator.permissions == null || navigator.permissions.query == null) {
     return [permission, setPermission];
   }
-
-  const handleSetPermission = async () => {
-    const permStatus: PermissionStatus = await navigator.permissions.query({
-      name: "notifications",
-    });
-    const state: PermissionState = permStatus.state;
-    // PermissionState != NotificationPermission, although they have overlapping states of "denied" and "granted"
-    if (state === "prompt") {
-      setPermission("default");
-    } else {
-      setPermission(state);
-    }
-  };
 
   const addObserver = async () => {
     const permStatus: PermissionStatus = await navigator.permissions.query({
       name: "notifications",
     });
-    permStatus.addEventListener("change", handleSetPermission);
+    permStatus.addEventListener("change", onChange);
   };
   const removeObserver = async () => {
     const permStatus: PermissionStatus = await navigator.permissions.query({
       name: "notifications",
     });
-    permStatus.removeEventListener("change", handleSetPermission);
+    permStatus.removeEventListener("change", onChange);
   };
 
   useEffect(() => {

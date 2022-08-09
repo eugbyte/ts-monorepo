@@ -14,7 +14,7 @@ const TestContainer: React.FC = () => {
   return <FormSection formHook={formHook} />;
 };
 
-describe("test form section", () => {
+describe("test dynamic form logic", () => {
   it("rows can be dynamically appended and removed", () => {
     render(<TestContainer />);
     let inputs = screen.getAllByRole("textbox");
@@ -23,14 +23,14 @@ describe("test form section", () => {
     const addButton = screen.getByRole("button", {
       name: /➕/i,
     });
-    fireEvent(addButton, new MouseEvent("click", { bubbles: true }));
+    fireEvent.click(addButton, { bubbles: true });
     inputs = screen.getAllByRole("textbox");
     expect(inputs.length).toBe(4);
 
     const deleteButtons: HTMLElement[] = screen.getAllByRole("button", {
       name: /➖/i,
     });
-    fireEvent(deleteButtons[1], new MouseEvent("click", { bubbles: true }));
+    fireEvent.click(deleteButtons[1], { bubbles: true });
     inputs = screen.getAllByRole("textbox");
     expect(inputs.length).toBe(2);
   });
@@ -42,8 +42,7 @@ describe("test form section", () => {
     const deleteButton = screen.getByRole("button", {
       name: /➖/i,
     });
-
-    fireEvent(deleteButton, new MouseEvent("click", { bubbles: true }));
+    fireEvent.click(deleteButton, { bubbles: true });
     inputs = screen.getAllByRole("textbox");
     expect(inputs.length).toBe(2);
   });

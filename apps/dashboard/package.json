@@ -41,7 +41,8 @@
     "build:sw": "bash  ./sw-dev.sh",
     "demo": "npm run build:sw && npm run start",
     "build": "rm -f 'public/service-worker.js' && craco build",
-    "test": "cross-env CI=true craco test",
+    "test": "craco test --env=jsdom",
+    "test:ci": "craco test --watchAll=false --forceExit",
     "eject": "craco eject",
     "lint:fix": "eslint . --ext .js,.ts,.tsx --fix"
   },
@@ -64,7 +65,6 @@
     ]
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.3.0",
     "@types/lodash.clonedeep": "^4.5.7",
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.14",

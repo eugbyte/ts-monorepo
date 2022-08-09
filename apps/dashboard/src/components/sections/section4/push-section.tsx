@@ -25,7 +25,7 @@ export const PushSection: React.FC<Props> = ({
       <div>
         {isPendingNotification && (
           <p className="text-white text-center text-xs">
-            This might take a while ...
+            This might take a while ... ( ≈ 10 sec )
           </p>
         )}
         <BarLoader

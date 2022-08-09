@@ -18,7 +18,6 @@ import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
 import { sleep } from "@browser-notify-ui/utils";
 import { nanoid } from "nanoid";
-import { faker } from "@faker-js/faker";
 
 export const MainPage: React.FC = () => {
   // Get the user's permission to display notification
@@ -41,12 +40,13 @@ export const MainPage: React.FC = () => {
   const handleSubscribe = async (): Promise<void> => {
     let newUserID = userID;
     let newCompany = company;
+
     if (newUserID === "") {
-      newUserID = `${nanoid()}_${faker.internet.email()}`;
+      newUserID = `${nanoid(5)}_@mail.com`;
       setUserId(newUserID);
     }
     if (newCompany === "") {
-      newCompany = faker.company.companyName();
+      newCompany = `${nanoid(5)}_company`;
       setCompany(newCompany);
     }
     await makeSubQuery(newCompany, newUserID);
@@ -70,7 +70,7 @@ export const MainPage: React.FC = () => {
     stepsCopy[2] = stepsCopy[1] && isSubscribed;
     stepsCopy[3] = stepsCopy[2];
     setSteps(stepsCopy);
-  }, [permission, isSubscribed]);
+  }, [steps[0], permission, isSubscribed]);
 
   // Dynamic Form to add and subtract rows containing the notification message info
   const formHook = useForm<FormValues>({
@@ -81,6 +81,7 @@ export const MainPage: React.FC = () => {
   });
   const {
     getValues,
+    trigger,
     formState: { isValid },
   } = formHook;
 
@@ -93,6 +94,7 @@ export const MainPage: React.FC = () => {
   // State to listen to whether the first notification has been received
   const [isPendingNotify, setPendingNotify] = useState(false);
   const onSubmit = async () => {
+    trigger();
     if (!isValid) {
       console.error("errors in the form detected");
       return;
@@ -127,6 +129,9 @@ export const MainPage: React.FC = () => {
         }
       }
     };
+    // apparently, this clean up runs at least once even before the component dismounts,
+    // thereby permanently closing the channel
+    // return () => broadcast.close();  // comment out for now
   }, []);
 
   return (
