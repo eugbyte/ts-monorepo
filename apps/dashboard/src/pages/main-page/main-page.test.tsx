@@ -3,45 +3,75 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { MainPage } from "./main-page";
 import * as notifyLib from "@browser-notify-ui/service-workers";
 import cloneDeep from "lodash.clonedeep";
+import { act } from "react-dom/test-utils";
+import { CREDENTIAL } from "~/models/enums";
 
-const oldNotificationObj = cloneDeep(global.Notification);
+const NotificationObj = cloneDeep(global.Notification);
+const StorageObj = cloneDeep(global.Storage);
 
 describe("test main page", () => {
   afterEach(() => {
-    global.Notification = oldNotificationObj;
+    global.Notification = NotificationObj;
+    global.Storage = StorageObj;
   });
 
-  it("'Grant permission' title should be displayed", () => {
+  it("'Grant permission' title should be displayed", async () => {
     render(<MainPage />);
-    expect(screen.findByText(/Grant permission/i)).resolves.toBeInTheDocument();
+    await expect(
+      screen.findByText(/Grant permission/i)
+    ).resolves.toBeInTheDocument();
   });
 
-  it("section 2 should show when permission is granted", () => {
+  it("section 2 should show when permission is granted", async () => {
     global.Notification = {
       permission: "granted",
     } as any;
     render(<MainPage />);
-    expect(
-      screen.findByText(/You have blocked notifications from the website/i)
+    await expect(
+      screen.findByText(/2. Subscribe/i)
     ).resolves.toBeInTheDocument();
-    expect(screen.findByText(/2. Subscribe/i)).resolves.toBeInTheDocument();
   });
 
-  it("section 3 and section 4 should show when section 2 successfully subscribes", () => {
+  it("section 3 and section 4 should show when section 2 successfully subscribes", async () => {
     global.Notification = {
       permission: "granted",
     } as any;
     jest.spyOn(notifyLib, "subscribe").mockResolvedValue({});
     render(<MainPage />);
 
-    const addButton = screen.getByRole("button", {
+    const subscribeButton = screen.getByRole("button", {
       name: /Subscribe/i,
     });
-    fireEvent(addButton, new MouseEvent("click", { bubbles: true }));
-    expect(
+
+    act(() => void fireEvent.click(subscribeButton, { bubbles: true }));
+
+    await expect(
       screen.findByText(/3. Create notifications/i)
     ).resolves.toBeInTheDocument();
-    expect(screen.findByText(/4. Send!/i)).resolves.toBeInTheDocument();
+    await expect(screen.findByText(/4. Send!/i)).resolves.toBeInTheDocument();
+  });
+
+  it("form validation should trigger upon submit", async () => {
+    global.Notification = {
+      permission: "granted",
+    } as any;
+    const mockStorage: Record<string, string> = {};
+    mockStorage[CREDENTIAL.BROWSER_NOTIFY_UI_USERID] = "test-userID";
+    mockStorage[CREDENTIAL.BROWSER_NOTIFY_UI_COMPANY] = "test-company";
+    global.Storage.prototype = {
+      getItem: jest.fn((key) => mockStorage[key]),
+      setItem: jest.fn((key, value) => (mockStorage[key] = value)),
+    } as any;
+
+    render(<MainPage />);
+
+    const submitButton = screen.getByRole("button", {
+      name: /Send/i,
+    });
+    fireEvent.click(submitButton, { bubbles: true });
+
+    await expect(
+      screen.findByText(/Title is required/i)
+    ).resolves.toBeInTheDocument();
   });
 });
-

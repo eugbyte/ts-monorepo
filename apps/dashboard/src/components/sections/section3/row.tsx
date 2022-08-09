@@ -55,16 +55,16 @@ export const Row: React.FC<Props> = ({
           <Input
             className="w-full sm:w-1/2"
             register={register(`notifications.${index}.title`, {
+              validate: (val) => val != null && val.trim().length > 0,
               required: true,
-              minLength: 1,
             } as const)}
             placeholder="Title"
           />
           <Input
             className="w-full sm:w-1/2"
             register={register(`notifications.${index}.message`, {
+              validate: (val) => val != null && val.trim().length > 0,
               required: true,
-              minLength: 1,
             } as const)}
             placeholder="Message"
           />

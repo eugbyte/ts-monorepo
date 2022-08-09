@@ -81,6 +81,7 @@ export const MainPage: React.FC = () => {
   });
   const {
     getValues,
+    trigger,
     formState: { isValid },
   } = formHook;
 
@@ -93,6 +94,7 @@ export const MainPage: React.FC = () => {
   // State to listen to whether the first notification has been received
   const [isPendingNotify, setPendingNotify] = useState(false);
   const onSubmit = async () => {
+    trigger();
     if (!isValid) {
       console.error("errors in the form detected");
       return;
@@ -116,7 +118,6 @@ export const MainPage: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("listening to broadcast...");
     broadcast.onmessage = (event: MessageEvent<any>) => {
       if (event.data != null) {
         const data = event.data as Record<string, string>;
