@@ -14,7 +14,7 @@ export const Input: React.FC<Props> = ({
   placeholder = "",
   className = "",
   register,
-  props,
+  ...props
 }) => {
   className = `w-2/3 mx-1 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight ${className}`;
   return (

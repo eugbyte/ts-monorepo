@@ -2,10 +2,13 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MainPage } from "./main-page";
 import * as notifyLib from "@browser-notify-ui/service-workers";
+import cloneDeep from "lodash.clonedeep";
+
+const oldNotificationObj = cloneDeep(global.Notification);
 
 describe("test main page", () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    global.Notification = oldNotificationObj;
   });
 
   it("'Grant permission' title should be displayed", () => {
@@ -41,3 +44,4 @@ describe("test main page", () => {
     expect(screen.findByText(/4. Send!/i)).resolves.toBeInTheDocument();
   });
 });
+
