@@ -12,7 +12,8 @@ export interface MessageInfo {
 
 export const pushMessage = async (
   apiKey: string,
-  notificationKey: string,
+  notifySecretName: string,
+  notifySecretValue: string,
   company: string,
   userID: string,
   title: string,
@@ -32,8 +33,8 @@ export const pushMessage = async (
   };
   const headers: AxiosRequestHeaders = {
     "API-Key": apiKey,
-    "Notify-Secret-Name": company,
-    "Notify-Secret-Value": notificationKey,
+    "Notify-Secret-Name": notifySecretName,
+    "Notify-Secret-Value": notifySecretValue,
   };
   const result = await axios.post(url, messageInfo, { headers });
   return result.data;

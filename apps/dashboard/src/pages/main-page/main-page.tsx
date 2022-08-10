@@ -46,7 +46,7 @@ export const MainPage: React.FC = () => {
       setUserId(newUserID);
     }
     if (newCompany === "") {
-      newCompany = `demo_company`;
+      newCompany = `${nanoid(5)}_company`;
       setCompany(newCompany);
     }
     await makeSubQuery(newCompany, newUserID);
@@ -85,11 +85,18 @@ export const MainPage: React.FC = () => {
     formState: { isValid },
   } = formHook;
 
-  // When the user submits the form
+  // When the user submits the form, make call to the backend
   // note that pushMessage() should be used in the backend, but since this is a demo app, we will call it in the browser
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, makePushQuery] = useHttpQuery(
-    pushMessage.bind(null, "demo_api_key", "YfZUV8HgaA4tMuH", company, userID)
+    pushMessage.bind(
+      null,
+      "demo_api_key",
+      "demo-company",
+      "YfZUV8HgaA4tMuH",
+      company,
+      userID
+    )
   ); // bind and fix the credentials arguments as they remain the same
 
   // State to listen to whether the first notification has been received
