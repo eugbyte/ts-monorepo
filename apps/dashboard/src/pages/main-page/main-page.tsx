@@ -85,7 +85,7 @@ export const MainPage: React.FC = () => {
     formState: { isValid },
   } = formHook;
 
-  // When the user submits the form, make call to the backend
+  // Push notifications to the current browser
   // note that pushMessage() should be used in the backend, but since this is a demo app, we will call it in the browser
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, makePushQuery] = useHttpQuery(
