@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 
 export interface MessageInfo {
   userID: string;
@@ -11,8 +11,11 @@ export interface MessageInfo {
 }
 
 export const pushMessage = async (
-  userID: string,
+  apiKey: string,
+  notifySecretName: string,
+  notifySecretValue: string,
   company: string,
+  userID: string,
   title: string,
   body: string,
   icon?: string
@@ -28,6 +31,11 @@ export const pushMessage = async (
       icon,
     },
   };
-  const result = await axios.post(url, messageInfo);
+  const headers: AxiosRequestHeaders = {
+    "API-Key": apiKey,
+    "Notify-Secret-Name": notifySecretName,
+    "Notify-Secret-Value": notifySecretValue,
+  };
+  const result = await axios.post(url, messageInfo, { headers });
   return result.data;
 };
