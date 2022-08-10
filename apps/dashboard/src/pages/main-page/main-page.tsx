@@ -85,10 +85,19 @@ export const MainPage: React.FC = () => {
     formState: { isValid },
   } = formHook;
 
-  // When the user submits the form, we add a delay in between the notification messages submitted
+  // Push notifications to the current browser
+  // note that pushMessage() should be used in the backend, due to having to pass api keys
+  // but since this is a demo app, we will call it in the browser
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, makePushQuery] = useHttpQuery(
-    pushMessage.bind(null, userID, company)
+    pushMessage.bind(
+      null,
+      "demo_api_key",
+      "demo-company",
+      "YfZUV8HgaA4tMuH",
+      company,
+      userID
+    )
   ); // bind and fix the credentials arguments as they remain the same
 
   // State to listen to whether the first notification has been received
