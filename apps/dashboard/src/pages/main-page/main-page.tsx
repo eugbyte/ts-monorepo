@@ -86,7 +86,8 @@ export const MainPage: React.FC = () => {
   } = formHook;
 
   // Push notifications to the current browser
-  // note that pushMessage() should be used in the backend, but since this is a demo app, we will call it in the browser
+  // note that pushMessage() should be used in the backend, due to having to pass api keys
+  // but since this is a demo app, we will call it in the browser
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, makePushQuery] = useHttpQuery(
     pushMessage.bind(
