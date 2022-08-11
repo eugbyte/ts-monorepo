@@ -4,6 +4,7 @@ import {
   requestPermission,
   pushMessage,
   broadcast,
+  MessageInfo,
 } from "@browser-notify-ui/service-workers";
 import { usePermission } from "~/hooks/permission";
 import { useForm } from "react-hook-form";
@@ -18,6 +19,7 @@ import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
 import { sleep } from "@browser-notify-ui/utils";
 import { nanoid } from "nanoid";
+import axios from "axios";
 
 export const MainPage: React.FC = () => {
   // Get the user's permission to display notification
@@ -90,14 +92,7 @@ export const MainPage: React.FC = () => {
   // but since this is a demo app, we will call it in the browser
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, makePushQuery] = useHttpQuery(
-    pushMessage.bind(
-      null,
-      "demo_api_key",
-      "demo-company",
-      "YfZUV8HgaA4tMuH",
-      company,
-      userID
-    )
+    pushMessage.bind(null, "demo_api_key", "demo-company", "YfZUV8HgaA4tMuH")
   ); // bind and fix the credentials arguments as they remain the same
 
   // State to listen to whether the first notification has been received
@@ -117,8 +112,21 @@ export const MainPage: React.FC = () => {
       await sleep(sleepDuration);
 
       try {
-        const result = await makePushQuery(title, message);
-        console.log(result);
+        const info: MessageInfo = {
+          userID,
+          company,
+          notification: {
+            title,
+            body: message,
+            icon: "",
+          },
+        };
+        // send to mock backend, which will call the
+        const { data } = await axios.post(
+          "http://localhost:7071/api/sample-push",
+          info
+        );
+        console.log(data);
       } catch (err) {
         setPendingNotify(false);
         console.error(err);
