@@ -10,14 +10,22 @@ export interface MessageInfo {
   };
 }
 
+/**
+ *
+ * @param apiKey api key to access web push's api. Will be issued to you
+ * @param notifySecretName Name of the secret. Will be issued to you
+ * @param notifySecretValue Value of the secret. Will be issued to you
+ * @param info the message info which must fulfill the MessageInfo interface
+ * @param url Optional, defaults to web notify's production api
+ * @returns
+ */
 export const pushMessage = async (
   apiKey: string,
   notifySecretName: string,
   notifySecretValue: string,
-  info: MessageInfo
+  info: MessageInfo,
+  url = "http://localhost:7071/api/notifications" // TO DO - change to stg url
 ): Promise<Record<string, string>> => {
-  const url = "http://localhost:7071/api/notifications";
-
   if (
     apiKey.trim() === "" ||
     notifySecretName.trim() === "" ||

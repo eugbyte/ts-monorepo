@@ -5,7 +5,6 @@ export type { MessageInfo } from "./notification";
 export const {
   subscribe,
   createSubscription,
-  SUBSCIRBE_URL,
   handlePush,
   register,
   requestPermission,

@@ -51,7 +51,12 @@ export const MainPage: React.FC = () => {
       newCompany = `${nanoid(5)}_company`;
       setCompany(newCompany);
     }
-    await makeSubQuery(newCompany, newUserID);
+    await makeSubQuery(
+      newCompany,
+      newUserID,
+      process.env.BROWSER_NOTIFY_SUBSCRIBE_URL ||
+        "http://localhost:7071/api/subscriptions"
+    );
   };
 
   // Check whether user has already subscribed by checking the local storage cache
@@ -105,19 +110,21 @@ export const MainPage: React.FC = () => {
       const sleepDuration = i > 0 ? 2000 : 0;
       await sleep(sleepDuration);
 
+      const info: MessageInfo = {
+        userID,
+        company,
+        notification: {
+          title,
+          body: message,
+          icon: "",
+        },
+      };
+
       try {
-        const info: MessageInfo = {
-          userID,
-          company,
-          notification: {
-            title,
-            body: message,
-            icon: "",
-          },
-        };
         // send to mock backend, which will call the
         const { data } = await axios.post(
-          "http://localhost:7071/api/sample-push",
+          process.env.BROWSER_NOTIFY_SAMPLE_PUSH_URL ||
+            "http://localhost:7071/api/sample-push", // TO DO - change to stg url
           info
         );
         console.log(data);
