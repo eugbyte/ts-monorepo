@@ -17,6 +17,9 @@ export const SubscribeSection: React.FC<Props> = ({
   return (
     <section className="flex flex-col items-center mt-10">
       <h1 className="text-xl text-white font-bold text-center">2. Subscribe</h1>
+      <p className="text-white text-sm">
+        Customer subscribes to web push notification
+      </p>
       <Button className="mt-2" handleClick={handleSubscribe}>
         {isSubscribed ? "Subscribed ✔️" : "Subscribe"}
       </Button>
