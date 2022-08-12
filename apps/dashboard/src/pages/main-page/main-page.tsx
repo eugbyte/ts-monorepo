@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   subscribe,
   requestPermission,
-  pushMessage,
   broadcast,
   MessageInfo,
 } from "@browser-notify-ui/service-workers";
@@ -14,12 +13,13 @@ import { SubscribeSection } from "~/components/sections/section2";
 import { FormSection } from "~/components/sections/section3";
 import { PushSection } from "~/components/sections/section4";
 import cloneDeep from "lodash.clonedeep";
-import { CREDENTIAL } from "~/models/enums";
+import { CREDENTIAL, QUERY_STATUS } from "~/models/enums";
 import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
 import { sleep } from "@browser-notify-ui/utils";
 import { nanoid } from "nanoid";
 import axios from "axios";
+import { About } from "~/components/sections/about";
 
 export const MainPage: React.FC = () => {
   // Get the user's permission to display notification
@@ -56,7 +56,8 @@ export const MainPage: React.FC = () => {
 
   // Check whether user has already subscribed by checking the local storage cache
   // If so, they can progress to the next few steps without having to subscribe again
-  const isSubscribed = userID !== "" && company !== "";
+  const isSubscribed =
+    userID !== "" && company !== "" && subQueryStatus === QUERY_STATUS.SUCCESS;
 
   // Progress Stepper
   // user can only progress towards towards the next step if previous step is completed, and when certain conditions are fulfilled
@@ -88,14 +89,7 @@ export const MainPage: React.FC = () => {
   } = formHook;
 
   // Push notifications to the current browser
-  // note that pushMessage() should be used in the backend, due to having to pass api keys
-  // but since this is a demo app, we will call it in the browser
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, makePushQuery] = useHttpQuery(
-    pushMessage.bind(null, "demo_api_key", "demo-company", "YfZUV8HgaA4tMuH")
-  ); // bind and fix the credentials arguments as they remain the same
-
-  // State to listen to whether the first notification has been received
+  // state to listen to whether the first notification has been received
   const [isPendingNotify, setPendingNotify] = useState(false);
   const onSubmit = async () => {
     trigger();
@@ -152,7 +146,8 @@ export const MainPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center bg-slate-800 h-screen px-1 sm:px-0">
+    <div className="flex flex-col justify-start items-center bg-slate-800 h-screen px-1 sm:px-0">
+      <About />
       {steps[0] && (
         <PermissionSection
           permission={permission}
