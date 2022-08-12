@@ -16,7 +16,7 @@ export const PushSection: React.FC<Props> = ({
       <h1 className="text-xl text-white font-bold mt-10 text-center">
         4. Send!
       </h1>
-      <p className="text-white text-sm">Company sends web notifications</p>
+      <p className="text-white text-sm">SaaS sends web notifications</p>
 
       <div className="flex flex-row justify-center my-2">
         <Button className="mt-2 font-bold px-10 py-5" handleClick={onSubmit}>

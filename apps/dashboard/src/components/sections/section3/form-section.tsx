@@ -29,7 +29,7 @@ export const FormSection: React.FC<Props> = ({ formHook }) => {
         3. Create notifications
       </h1>
       <p className="text-white text-sm text-center">
-        Company creates web notifications
+        Company creates web notifications via SaaS's API
       </p>
       <div className="mt-2">
         <div className="flex flex-col">
