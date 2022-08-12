@@ -53,7 +53,7 @@ export const Row: React.FC<Props> = ({
       <div className="flex flex-col sm:flex-row items-end my-1 flex-wrap justify-end space-y-1 sm:space-y-0">
         <div className="flex flex-col sm:flex-row" key={field.id}>
           <Input
-            className="w-full sm:w-1/2"
+            className="w-full sm:w-1/2 placeholder-gray-500"
             register={register(`notifications.${index}.title`, {
               validate: (val) => val != null && val.trim().length > 0,
               required: true,
@@ -61,7 +61,7 @@ export const Row: React.FC<Props> = ({
             placeholder="Title"
           />
           <Input
-            className="w-full sm:w-1/2"
+            className="w-full sm:w-1/2 placeholder-gray-500"
             register={register(`notifications.${index}.message`, {
               validate: (val) => val != null && val.trim().length > 0,
               required: true,

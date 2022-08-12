@@ -22,6 +22,9 @@ export const PermissionSection: React.FC<Props> = ({
       <h1 className="text-xl text-white font-bold text-center">
         1. Grant permission
       </h1>
+      <p className="text-white text-sm">
+        Customer grants permission to receive notification
+      </p>
       <Button className="mt-2" handleClick={handlePermission}>
         {buttonTextDict[permission]}
       </Button>
