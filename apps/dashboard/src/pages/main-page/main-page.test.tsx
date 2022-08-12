@@ -72,7 +72,7 @@ describe("test main page", () => {
     const submitButton = await screen.findByRole("button", {
       name: /Send/i,
     });
-    act(() => void fireEvent.click(submitButton, { bubbles: true }));    
+    act(() => void fireEvent.click(submitButton, { bubbles: true }));
 
     await expect(
       screen.findByText(/Title is required/i)
