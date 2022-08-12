@@ -42,7 +42,6 @@ describe("test main page", () => {
     const subscribeButton = screen.getByRole("button", {
       name: /Subscribe/i,
     });
-
     act(() => void fireEvent.click(subscribeButton, { bubbles: true }));
 
     await expect(
@@ -62,13 +61,18 @@ describe("test main page", () => {
       getItem: jest.fn((key) => mockStorage[key]),
       setItem: jest.fn((key, value) => (mockStorage[key] = value)),
     } as any;
-
+    jest.spyOn(notifyLib, "subscribe").mockResolvedValue({});
     render(<MainPage />);
 
-    const submitButton = screen.getByRole("button", {
+    const subscribeButton = screen.getByRole("button", {
+      name: /Subscribe/i,
+    });
+    act(() => void fireEvent.click(subscribeButton, { bubbles: true }));
+
+    const submitButton = await screen.findByRole("button", {
       name: /Send/i,
     });
-    fireEvent.click(submitButton, { bubbles: true });
+    act(() => void fireEvent.click(submitButton, { bubbles: true }));    
 
     await expect(
       screen.findByText(/Title is required/i)
