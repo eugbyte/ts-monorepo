@@ -103,7 +103,7 @@ export const MainPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col justify-start items-center bg-slate-800 h-screen px-1 sm:px-0">
+    <div className="flex flex-col justify-start items-center bg-slate-800 h-screen px-1 sm:px-0 overflow-auto">
       <About />
       {steps[0] && (
         <PermissionSection
