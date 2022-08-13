@@ -2,7 +2,7 @@
 Monorepo in Typescript
 
 ## `apps` vs `libs`
-'libs' are meant to be published to npm and installed, 'apps' are meant to be executed.
+`libs` are meant to be published to npm and installed, `apps` are meant to be executed.
 
 ## Gotchas
 1. For CRA, to import JSX and TSX from paths outside a workspace root directory, need to [configure babel loader to recognise such paths](https://frontend-digest.com/using-create-react-app-in-a-monorepo-a4e6f25be7aa)
