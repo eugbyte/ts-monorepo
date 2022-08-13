@@ -1,5 +1,5 @@
 # web-push-dashboard
-Front-end dashboard for web push SaaS. Using monorepo architecture.
+Front-end dashboard for web push notification SaaS. Using monorepo architecture.
 
 ## Gotchas
 1. To import JSX and TSX from paths outside a workspace root directory, need to [configure babel loader to recognise such paths](https://frontend-digest.com/using-create-react-app-in-a-monorepo-a4e6f25be7aa)
