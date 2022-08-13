@@ -14,7 +14,9 @@ export const PushSection: React.FC<Props> = ({
   const ref = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
-    ref.current?.scrollIntoView(true);
+    if (ref.current != null && ref.current.scrollIntoView != null) {
+      ref.current.scrollIntoView(true);
+    }
     onSubmit();
   };
   return (
