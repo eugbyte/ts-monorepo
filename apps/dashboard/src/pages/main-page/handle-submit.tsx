@@ -24,13 +24,13 @@ export const handleSubmit = async ({
 }: Props) => {
   const {
     trigger,
-    formState: { errors, isValid },
+    formState: { errors },
     getValues,
   } = formHook;
   await trigger();
-  console.log({ errors });
-  if (!isValid) {
-    console.error("errors in the form detected");
+  // formState.isValid is buggy
+  if (Object.keys(errors).length > 0) {
+    console.error("errors in the form detected", errors);
     return;
   }
   setPendingNotify(true);
@@ -41,21 +41,19 @@ export const handleSubmit = async ({
     const sleepDuration = i > 0 ? 2000 : 0;
     await sleep(sleepDuration);
 
-    const info: MessageInfo = {
-      userID,
-      company,
-      notification: {
-        title,
-        body: message,
-        icon: "",
-      },
-    };
-
     try {
+      const info: MessageInfo = {
+        userID,
+        company,
+        notification: {
+          title,
+          body: message,
+          icon: "",
+        },
+      };
       // send to mock backend, which will call the
       const { data } = await axios.post(
-        process.env.BROWSER_NOTIFY_SAMPLE_PUSH_URL ||
-          "http://localhost:7071/api/sample-push", // TO DO - change to stg url
+        "http://localhost:7071/api/sample-push",
         info
       );
       console.log(data);
