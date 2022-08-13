@@ -1,5 +1,5 @@
 {
-  "name": "@browser-notify-ui/utils",
+  "name": "@eugbyte-monorepo/utils",
   "main": "src/index.ts",
   "version": "0.1.0",
   "private": true,

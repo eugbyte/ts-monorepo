@@ -3,7 +3,7 @@ import {
   subscribe,
   requestPermission,
   broadcast,
-} from "@browser-notify-ui/service-workers";
+} from "@eugbyte-monorepo/service-workers";
 import { usePermission } from "~/hooks/permission";
 import { useForm } from "react-hook-form";
 import { FormValues } from "~/models/Notify";

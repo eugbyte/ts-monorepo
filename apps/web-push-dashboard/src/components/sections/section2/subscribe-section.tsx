@@ -1,4 +1,4 @@
-import { Button } from "@browser-notify-ui/components";
+import { Button } from "@eugbyte-monorepo/components";
 import React from "react";
 import { BarLoader } from "react-spinners";
 import { QUERY_STATUS } from "~/models/enums";
