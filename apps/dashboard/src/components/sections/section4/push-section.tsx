@@ -1,4 +1,4 @@
-import { Button } from "@browser-notify-ui/components";
+import { Button } from "@eugbyte-ts-monorepo/components";
 import React, { useRef } from "react";
 import { BarLoader } from "react-spinners";
 

@@ -1,5 +1,5 @@
 {
-  "name": "browser-notify-ui",
+  "name": "eugbyte-ts-monorepo",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -10,6 +10,7 @@
   "author": "eugbyte",
   "license": "ISC",
   "workspaces": [
+    "apps/web-push-dashboard/**",
     "apps/dashboard/**",
     "libs/components/**",
     "libs/utils/**",

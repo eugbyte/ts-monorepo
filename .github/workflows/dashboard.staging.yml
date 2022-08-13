@@ -28,8 +28,8 @@ jobs:
       - name: Install node modules
         run: npm ci
       - name: Run unit tests
-        run: npm --workspace=@browser-notify-ui/dashboard run test:ci
+        run: npm --workspace=@eugbyte-ts-monorepo/web-push-dashboard run test:ci
         env:
           CI: true 
       - name: Run lint
-        run: npm --workspace=@browser-notify-ui/dashboard run lint:fix 
+        run: npm --workspace=@eugbyte-ts-monorepo/web-push-dashboard run lint:fix 

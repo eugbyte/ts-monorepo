@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MainPage } from "./main-page";
-import * as notifyLib from "@browser-notify-ui/service-workers";
+import * as notifyLib from "@eugbyte-ts-monorepo/service-workers";
 import cloneDeep from "lodash.clonedeep";
 import { act } from "react-dom/test-utils";
 import { CREDENTIAL } from "~/models/enums";

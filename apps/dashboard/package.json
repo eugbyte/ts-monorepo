@@ -1,9 +1,8 @@
 {
-  "name": "@browser-notify-ui/dashboard",
+  "name": "@eugbyte-ts-monorepo/web-push-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@browser-notify-ui/service-workers": "*",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",

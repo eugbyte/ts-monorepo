@@ -1,5 +1,5 @@
 {
-  "name": "@browser-notify-ui/components",
+  "name": "@eugbyte-ts-monorepo/components",
   "main": "src/index.tsx",
   "version": "0.1.0",
   "private": true,

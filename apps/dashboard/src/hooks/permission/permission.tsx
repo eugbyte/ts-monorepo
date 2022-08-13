@@ -1,4 +1,4 @@
-import { getPermissionState } from "@browser-notify-ui/service-workers";
+import { getPermissionState } from "@eugbyte-ts-monorepo/service-workers";
 import { useState, useEffect } from "react";
 
 /**

@@ -1,5 +1,5 @@
-import { MessageInfo } from "@browser-notify-ui/service-workers";
-import { sleep } from "@browser-notify-ui/utils";
+import { MessageInfo } from "@eugbyte-ts-monorepo/service-workers";
+import { sleep } from "@eugbyte-ts-monorepo/utils";
 import { UseFormReturn } from "react-hook-form";
 import { Notify } from "~/models/Notify";
 import axios from "axios";
