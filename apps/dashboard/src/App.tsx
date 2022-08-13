@@ -3,7 +3,7 @@ import MainPage from "./pages/main-page";
 
 function App() {
   return (
-    <div className="">
+    <div className="overflow-auto">
       <MainPage />
     </div>
   );

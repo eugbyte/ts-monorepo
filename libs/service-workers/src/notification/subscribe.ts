@@ -39,14 +39,20 @@ const saveSubscription = async (
   return result.data;
 };
 
-export const SUBSCIRBE_URL = "http://localhost:7071/api/subscriptions";
-
+/**
+ *
+ * @param companyName Name of your company
+ * @param userID Identity of the user to push the web notification to
+ * @param subscribeUrl Optional, defaults to web notify's production url
+ * @returns
+ */
 export const subscribe = async (
   companyName: string,
-  userID: string
+  userID: string,
+  subscribeUrl = "http://localhost:7071/api/subscriptions" // TO DO - change to stg url
 ): Promise<PushSubscriptionJSON> => {
   const vapidPublicKey =
-    "BPlL5OTZwtW-0-4pQXmobTgX6URszc9-UKoTTvpvInhUlPHorlDM8y04J-rrErlQXMVH7_Us983mNmmwsb-z53U";
+    "BPlL5OTZwtW-0-4pQXmobTgX6URszc9-UKoTTvpvInhUlPHorlDM8y04J-rrErlQXMVH7_Us983mNmmwsb-z53U"; // TO DO - change to process.env.VAPID_PUBLIC_KEY depending on stg
   const expirationTime = 60;
   const subscription: PushSubscriptionJSON = await createSubscription(
     vapidPublicKey,
@@ -54,7 +60,7 @@ export const subscribe = async (
   );
 
   const res = await saveSubscription(
-    SUBSCIRBE_URL,
+    subscribeUrl,
     companyName,
     userID,
     subscription
