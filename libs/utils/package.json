@@ -1,5 +1,5 @@
 {
-  "name": "@eugbyte-ts-monorepo/utils",
+  "name": "@eugbyte-monorepo/utils",
   "main": "src/index.ts",
   "version": "0.1.0",
   "private": true,

@@ -1,4 +1,4 @@
-import { Button } from "@eugbyte-ts-monorepo/components";
+import { Button } from "@eugbyte-monorepo/components";
 import React from "react";
 import { Instruction } from "./instruction";
 

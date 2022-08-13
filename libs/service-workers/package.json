@@ -1,5 +1,5 @@
 {
-  "name": "@eugbyte-ts-monorepo/service-workers",
+  "name": "@eugbyte-monorepo/service-workers",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",

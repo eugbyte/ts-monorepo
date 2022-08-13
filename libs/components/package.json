@@ -1,5 +1,5 @@
 {
-  "name": "@eugbyte-ts-monorepo/components",
+  "name": "@eugbyte-monorepo/components",
   "main": "src/index.tsx",
   "version": "0.1.0",
   "private": true,

@@ -1,5 +1,5 @@
 {
-  "name": "@eugbyte-ts-monorepo/web-push-dashboard",
+  "name": "@eugbyte-monorepo/web-push-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

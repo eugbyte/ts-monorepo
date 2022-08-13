@@ -1,4 +1,4 @@
-import { Button, Input } from "@eugbyte-ts-monorepo/components";
+import { Button, Input } from "@eugbyte-monorepo/components";
 import React from "react";
 import {
   DeepRequired,

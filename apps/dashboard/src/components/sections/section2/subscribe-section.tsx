@@ -1,4 +1,4 @@
-import { Button } from "@eugbyte-ts-monorepo/components";
+import { Button } from "@eugbyte-monorepo/components";
 import React from "react";
 import { BarLoader } from "react-spinners";
 import { QUERY_STATUS } from "~/models/enums";
