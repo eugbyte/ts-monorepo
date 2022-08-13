@@ -91,7 +91,7 @@ export const MainPage: React.FC = () => {
   // state to listen to whether the first notification has been received
   const [isPendingNotify, setPendingNotify] = useState(false);
   // retrieve the form values, submit them, and initialize the loading bar
-  const onSubmit = async () =>
+  const onSubmit = () =>
     handleSubmit({ formHook, userID, company, setPendingNotify });
 
   // stop the loading bar once the notification is received

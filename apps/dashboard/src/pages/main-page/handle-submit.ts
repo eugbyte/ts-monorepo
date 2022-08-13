@@ -24,10 +24,11 @@ export const handleSubmit = async ({
 }: Props) => {
   const {
     trigger,
-    formState: { isValid },
+    formState: { errors, isValid },
     getValues,
   } = formHook;
-  trigger();
+  await trigger();
+  console.log({ errors });
   if (!isValid) {
     console.error("errors in the form detected");
     return;
