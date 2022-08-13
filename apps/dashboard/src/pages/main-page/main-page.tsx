@@ -3,7 +3,6 @@ import {
   subscribe,
   requestPermission,
   broadcast,
-  MessageInfo,
 } from "@browser-notify-ui/service-workers";
 import { usePermission } from "~/hooks/permission";
 import { useForm } from "react-hook-form";
@@ -16,10 +15,10 @@ import cloneDeep from "lodash.clonedeep";
 import { CREDENTIAL, QUERY_STATUS } from "~/models/enums";
 import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
-import { sleep } from "@browser-notify-ui/utils";
 import { nanoid } from "nanoid";
-import axios from "axios";
 import { About } from "~/components/sections/about";
+import { handleSubmit } from "./handle-submit";
+import { handleBroadcast } from "./handle-broadcast";
 
 export const MainPage: React.FC = () => {
   // Get the user's permission to display notification
@@ -87,66 +86,17 @@ export const MainPage: React.FC = () => {
       notifications: [{ title: "", message: "" }],
     },
   });
-  const {
-    getValues,
-    trigger,
-    formState: { isValid },
-  } = formHook;
 
   // Push notifications to the current browser
   // state to listen to whether the first notification has been received
   const [isPendingNotify, setPendingNotify] = useState(false);
-  const onSubmit = async () => {
-    trigger();
-    if (!isValid) {
-      console.error("errors in the form detected");
-      return;
-    }
-    setPendingNotify(true);
+  // retrieve the form values, submit them, and initialize the loading bar
+  const onSubmit = async () =>
+    handleSubmit({ formHook, userID, company, setPendingNotify });
 
-    const { notifications } = getValues();
-    for (let i = 0; i < notifications.length; i++) {
-      const { title, message } = notifications[i];
-      const sleepDuration = i > 0 ? 2000 : 0;
-      await sleep(sleepDuration);
-
-      const info: MessageInfo = {
-        userID,
-        company,
-        notification: {
-          title,
-          body: message,
-          icon: "",
-        },
-      };
-
-      try {
-        // send to mock backend, which will call the
-        const { data } = await axios.post(
-          process.env.BROWSER_NOTIFY_SAMPLE_PUSH_URL ||
-            "http://localhost:7071/api/sample-push", // TO DO - change to stg url
-          info
-        );
-        console.log(data);
-      } catch (err) {
-        setPendingNotify(false);
-        console.error(err);
-      }
-    }
-  };
-
+  // stop the loading bar once the notification is received
   useEffect(() => {
-    broadcast.onmessage = (event: MessageEvent<any>) => {
-      if (event.data != null) {
-        const data = event.data as Record<string, string>;
-        if (data["type"] === "BROSWER_NOTIFY_UI") {
-          console.log(
-            `message detected: ${new Date().getSeconds()}.${new Date().getMilliseconds()}s`
-          );
-          setPendingNotify(false);
-        }
-      }
-    };
+    broadcast.onmessage = handleBroadcast.bind(null, setPendingNotify);
     // apparently, this clean up runs at least once even before the component dismounts,
     // thereby permanently closing the channel
     // return () => broadcast.close();  // comment out for now
