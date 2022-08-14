@@ -14,11 +14,30 @@ Monorepo in Typescript
 
 ---
 
-## Development Gotchas
-1. Refer to [this guide](https://github.com/NiGhTTraX/ts-monorepo#integrations) for resolving path resolutions w.r.t CRA, webpack etc.
-2. For CRA, to import JSX and TSX from paths outside a workspace root directory, need to [configure babel loader to recognise such paths](https://frontend-digest.com/using-create-react-app-in-a-monorepo-a4e6f25be7aa)
-3. Remember to do `npm i` to symlink the workspaces each time you create a new workspace.
-4. In order for the monorepo linting to work, need to have a child `.eslintrc.js` file in each workspace, that `extends` the base `.eslintrc.js`. This is so even though the [official docs did not specify such a requirement](https://typescript-eslint.io/docs/linting/monorepo)
-5. If importing a workspace, remember to [update the `package.json` of the importing workspace](https://www.robinwieruch.de/javascript-monorepos/) with the imported workspace package name.
-6. Execute commands specific to a workspace with the --workspace flag option, [see here](https://docs.npmjs.com/cli/v7/using-npm/workspaces#running-commands-in-the-context-of-workspaces)
-7. To share the tailwind theme config, under `tailwind.config.js` -> `theme`, export a theme object under the `libs/utils` package
+## Development Guide
+- Execute commands specific to a workspace with the `--workspace` flag option, [see here](https://docs.npmjs.com/cli/v7/using-npm/workspaces#running-commands-in-the-context-of-workspaces)
+```
+npm --workspace=@eugbyte-monorepo/web-push-dashboard run test
+```
+- Refer to [this guide](https://github.com/NiGhTTraX/ts-monorepo#integrations) for resolving path resolutions outside a workspace root directory.
+    * For CRA, need to [configure babel loader to recognise such paths](https://frontend-digest.com/using-create-react-app-in-a-monorepo-a4e6f25be7aa)
+- Remember to do `npm i` to symlink the workspaces each time you create a new workspace.
+- In order for the monorepo linting to work, need to have a `.eslintrc.js` file in each workspace, that `extends` the base `.eslintrc.js`. 
+```
+module.exports = {
+    extends: ["../../.eslintrc.js"],
+    ignorePatterns: [
+        "service-worker.js"
+    ]
+};
+```
+- To share the tailwind theme config, load the `presets` with the base config like so
+```
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",   // for tailwind to work in the workspace
+    "../../libs/components/**/*.{jsx,tsx}"  // for tailwind to work for directories outside the workspace root dir
+  ],
+  presets: [require("../../tailwind.base.config.js")]   // inherit the base tailwind config
+}
+```
