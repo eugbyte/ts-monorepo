@@ -8,7 +8,7 @@ on:
     paths:
       - ".github/**"
       - "libs/**"
-      - "apps/dashboard/**"
+      - "apps/web-push-dashboard/**"
 
 jobs:
   unit-test:
