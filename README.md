@@ -1,5 +1,5 @@
 # TS monorepo
-Monorepo in Typescript
+Monorepo in Typescript, using npm workspaces
 
 ## `apps` vs `libs`
 `libs` are meant to be published to npm and installed, `apps` are meant to be executed.
