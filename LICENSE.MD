@@ -1,1 +1,0 @@
-Refer to the individual repositories for the corresponding license
