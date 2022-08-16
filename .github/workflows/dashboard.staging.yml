@@ -8,7 +8,7 @@ on:
     paths:
       - ".github/**"
       - "libs/**"
-      - "apps/web-push-dashboard/**"
+      - "apps/web-notify-dashboard/**"
 
 jobs:
   unit-test:
@@ -28,8 +28,8 @@ jobs:
       - name: Install node modules
         run: npm ci
       - name: Run unit tests
-        run: npm --workspace=@eugbyte-monorepo/web-push-dashboard run test:ci
+        run: npm --workspace=@eugbyte-monorepo/web-notify-dashboard run test:ci
         env:
           CI: true 
       - name: Run lint
-        run: npm --workspace=@eugbyte-monorepo/web-push-dashboard run lint:fix 
+        run: npm --workspace=@eugbyte-monorepo/web-notify-dashboard run lint:fix 
