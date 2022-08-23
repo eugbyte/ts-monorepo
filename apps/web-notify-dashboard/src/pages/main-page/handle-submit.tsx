@@ -53,8 +53,14 @@ export const handleSubmit = async ({
       };
       // send to mock backend, which will call the
       const { data } = await axios.post(
-        "http://localhost:7071/api/sample-push",
-        info
+        "https://func-webnotify-stg-ea.azurewebsites.net/api/sample-push", // TO DO - change to stg
+        info,
+        {
+          headers: {
+            "x-functions-key":
+              "x2dC9b-WLtu93xiogy2XZM_wUOQ0KYyAy8nK1Pf2A97wAzFuJaIJRQ==",
+          },
+        }
       );
       console.log(data);
     } catch (err) {
