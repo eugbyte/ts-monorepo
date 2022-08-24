@@ -1,6 +1,6 @@
-name: dashboard
+name: dashboard-dev
 concurrency:
-  group: dashboard
+  group: dashboard-dev
   cancel-in-progress: true
 
 on:
