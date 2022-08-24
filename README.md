@@ -45,3 +45,4 @@ module.exports = {
 ## Gotchas
 - There is a module resolution conflict between `react-scripts` and `craco`. Specifying craco at the root package seems to resolve this issue
 - ts-jest needs to be installed for jest to run. Specified at the root package.json`.
+- npm workspace is only available from npm -v > @16. Enforce the version via the `engine` field of `package.json`
