@@ -1,5 +1,5 @@
 import { urlBase64ToUint8Array } from "./util";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 // create the subscription with a push service (chrome, firefox),
 // which will generate an endpoint associated with the browser's ip address,
@@ -26,16 +26,26 @@ export const createSubscription = async (
 
 // save the user details and subscription to our database
 const saveSubscription = async (
-  url: string,
   companyName: string,
   userID: string,
+  subscriberUrl: string,
+  apiKey: string,
   subscription: PushSubscriptionJSON
 ): Promise<Record<string, string>> => {
-  const result = await axios.post(url, {
-    company: companyName,
-    userID,
-    ...subscription,
-  });
+  const requestConfig: AxiosRequestConfig = {
+    headers: {
+      "x-functions-key": apiKey,
+    },
+  };
+  const result = await axios.post(
+    subscriberUrl,
+    {
+      company: companyName,
+      userID,
+      ...subscription,
+    },
+    requestConfig
+  );
   return result.data;
 };
 
@@ -44,12 +54,14 @@ const saveSubscription = async (
  * @param companyName Name of your company
  * @param userID Identity of the user to push the web notification to
  * @param subscribeUrl Optional, defaults to web notify's production url
+ * @param apiKey The api key for web notify's production url. Defaults to the demo
  * @returns
  */
 export const subscribe = async (
   companyName: string,
   userID: string,
-  subscribeUrl = "http://localhost:7071/api/subscriptions" // TO DO - change to stg url
+  subscribeUrl = "https://func-webnotify-stg-ea.azurewebsites.net/api/subscriptions", // TO DO - change to stg url
+  apiKey = "i5An4NBTQ53Po43aj5lc_y3JYu3ZIDYtiZyo5ylS5agKAzFuAVlbIA=="
 ): Promise<PushSubscriptionJSON> => {
   const vapidPublicKey =
     "BPlL5OTZwtW-0-4pQXmobTgX6URszc9-UKoTTvpvInhUlPHorlDM8y04J-rrErlQXMVH7_Us983mNmmwsb-z53U"; // TO DO - change to process.env.VAPID_PUBLIC_KEY depending on stg
@@ -60,9 +72,10 @@ export const subscribe = async (
   );
 
   const res = await saveSubscription(
-    subscribeUrl,
     companyName,
     userID,
+    subscribeUrl,
+    apiKey,
     subscription
   );
   console.log({ "subscription save result": res });

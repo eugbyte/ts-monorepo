@@ -12,7 +12,7 @@ export const About: React.FC = () => {
         doing on my computer without having to constantly check my phone.
       </p>
       <p className="text-white break-words max-w-3xl text-justify mt-5">
-        Overall flow and proof of concept below.
+        Overall flow and demo below:
       </p>
     </section>
   );

@@ -2,7 +2,7 @@ import { MessageInfo } from "@eugbyte-monorepo/service-workers";
 import { sleep } from "@eugbyte-monorepo/utils";
 import { UseFormReturn } from "react-hook-form";
 import { Notify } from "~/models/Notify";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 interface Props {
   formHook: UseFormReturn<
@@ -51,11 +51,21 @@ export const handleSubmit = async ({
           icon: "",
         },
       };
+
+      const submitURL: string =
+        process.env.REACT_APP_STAGE === "dev"
+          ? "http://localhost:7071/api/subscriptions"
+          : "https://func-webnotify-stg-ea.azurewebsites.net/api/sample-push";
+
+      const config: AxiosRequestConfig = {
+        headers: {
+          "x-functions-key":
+            "x2dC9b-WLtu93xiogy2XZM_wUOQ0KYyAy8nK1Pf2A97wAzFuJaIJRQ==",
+        },
+      };
+
       // send to mock backend, which will call the
-      const { data } = await axios.post(
-        "http://localhost:7071/api/sample-push",
-        info
-      );
+      const { data } = await axios.post(submitURL, info, config);
       console.log(data);
     } catch (err) {
       setPendingNotify(false);
