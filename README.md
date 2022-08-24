@@ -41,3 +41,7 @@ module.exports = {
   presets: [require("../../tailwind.base.config.js")]   // inherit the base tailwind config
 }
 ```
+
+## Gotchas
+- There is a module resolution conflict between `react-scripts` and `craco`. Specifying craco at the root package seems to resolve this issue
+- ts-jest needs to be installed for jest to run. Specified at the root package.json`.
