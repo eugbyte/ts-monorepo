@@ -41,3 +41,6 @@ module.exports = {
   presets: [require("../../tailwind.base.config.js")]   // inherit the base tailwind config
 }
 ```
+
+## Gotchas
+- npm workspace is only available from npm -v > @16. Enforce the version via the `engine` field of `package.json`

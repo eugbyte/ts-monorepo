@@ -1,24 +1,27 @@
-name: dashboard
+name: dashboard-staging
 concurrency:
-  group: dashboard
+  group: dashboard-staging
   cancel-in-progress: true
 
 on:
   push:
-    paths:
-      - ".github/**"
-      - "libs/**"
-      - "apps/web-notify-dashboard/**"
+    branches:
+      - chore/deploy-2
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - chore/deploy-2
 
 jobs:
-  unit-test:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+    name: Build and deploy to azure
     steps:
       - name: Checkout monorepo
         uses: actions/checkout@v3
+        with:
+          submodules: true
       - name: Print dir
         run: ls
       - name: Install Node
@@ -26,10 +29,29 @@ jobs:
         with:
           node-version: '16.x'
       - name: Install node modules
-        run: npm ci
-      - name: Run unit tests
-        run: npm --workspace=@eugbyte-monorepo/web-notify-dashboard run test:ci
-        env:
-          CI: true 
-      - name: Run lint
-        run: npm --workspace=@eugbyte-monorepo/web-notify-dashboard run lint:fix 
+        run: npm ci # still need to run clean install for the sym link for the monorepo
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_NICE_GROUND_07440CD00 }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: "/apps/web-notify-dashboard" # App source code path
+          api_location: "" # Api source code path - optional
+          output_location: "build" # Built app content directory - optional
+          ###### End of Repository/Build Configurations ######
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_NICE_GROUND_07440CD00 }}
+          action: "close"
