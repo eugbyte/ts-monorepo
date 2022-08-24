@@ -12,13 +12,13 @@ import { SubscribeSection } from "~/components/sections/section2";
 import { FormSection } from "~/components/sections/section3";
 import { PushSection } from "~/components/sections/section4";
 import cloneDeep from "lodash.clonedeep";
-import { CREDENTIAL, QUERY_STATUS } from "~/models/enums";
+import { CREDENTIAL } from "~/models/enums";
 import { useHttpQuery } from "~/hooks/http-query";
 import { useLocalStorage } from "~/hooks/local-storage";
-import { nanoid } from "nanoid";
 import { About } from "~/components/sections/about";
 import { handleSubmit } from "./handle-submit";
 import { handleBroadcast } from "./handle-broadcast";
+import { handleSubscribe } from "./handle-subscribe";
 
 export const MainPage: React.FC = () => {
   // Get the user's permission to display notification
@@ -38,27 +38,12 @@ export const MainPage: React.FC = () => {
 
   // Subscribe the user to our web push notification service
   const [subQueryStatus, makeSubQuery] = useHttpQuery(subscribe.bind(null));
-  const handleSubscribe = async (): Promise<void> => {
-    let newUserID = userID;
-    let newCompany = company;
-
-    if (newUserID === "") {
-      newUserID = `${nanoid(5)}_@mail.com`;
-      setUserId(newUserID);
-    }
-    if (newCompany === "") {
-      newCompany = `${nanoid(5)}_company`;
-      setCompany(newCompany);
-    }
-
-    //   Use "http://localhost:7071/api/subscriptions" as the 3rd argument to connect to localhost
-    await makeSubQuery(newCompany, newUserID);
-  };
+  const onSubscribe = () =>
+    handleSubscribe({ userID, setUserId, company, setCompany, makeSubQuery });
 
   // Check whether user has already subscribed by checking the local storage cache
   // If so, they can progress to the next few steps without having to subscribe again
-  const isSubscribed =
-    userID !== "" && company !== "" && subQueryStatus === QUERY_STATUS.SUCCESS;
+  const isSubscribed = userID !== "" && company !== ""; //
 
   // Progress Stepper
   // user can only progress towards towards the next step if previous step is completed, and when certain conditions are fulfilled
@@ -110,7 +95,7 @@ export const MainPage: React.FC = () => {
       )}
       {steps[1] && (
         <SubscribeSection
-          handleSubscribe={handleSubscribe}
+          handleSubscribe={onSubscribe}
           isSubscribed={isSubscribed}
           subscriptionQueryStatus={subQueryStatus}
         />

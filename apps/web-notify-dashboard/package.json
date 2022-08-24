@@ -36,9 +36,9 @@
     "workbox-webpack-plugin": "^6.5.3"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none craco start",
+    "start": "cross-env BROWSER=none REACT_APP_STAGE=dev craco start",
     "build:sw": "bash  ./sw-dev.sh",
-    "demo": "npm run build:sw && npm run start",
+    "demo": "cross-env BROWSER=none REACT_APP_STAGE=stg && npm run build:sw && craco start",
     "build": "rm -f 'public/service-worker.js' && craco build",
     "test": "craco test --env=jsdom",
     "test:ci": "craco test --watchAll=false --forceExit",
