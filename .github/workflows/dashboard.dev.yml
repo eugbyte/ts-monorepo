@@ -1,0 +1,35 @@
+name: dashboard-dev
+concurrency:
+  group: dashboard-dev
+  cancel-in-progress: true
+
+on:
+  push:
+    paths:
+      - ".github/**"
+      - "libs/**"
+      - "apps/web-notify-dashboard/**"
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v3
+      - name: Print dir
+        run: ls
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install node modules
+        run: npm ci
+      - name: Run unit tests
+        run: npm --workspace=@eugbyte-monorepo/web-notify-dashboard run test:ci
+        env:
+          CI: true 
+      - name: Run lint
+        run: npm --workspace=@eugbyte-monorepo/web-notify-dashboard run lint:fix 
