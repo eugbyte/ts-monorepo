@@ -50,12 +50,9 @@ export const MainPage: React.FC = () => {
       newCompany = `${nanoid(5)}_company`;
       setCompany(newCompany);
     }
-    await makeSubQuery(
-      newCompany,
-      newUserID,
-      process.env.BROWSER_NOTIFY_SUBSCRIBE_URL ||
-        "http://localhost:7071/api/subscriptions"
-    );
+
+    //   Use "http://localhost:7071/api/subscriptions" as the 3rd argument to connect to localhost
+    await makeSubQuery(newCompany, newUserID);
   };
 
   // Check whether user has already subscribed by checking the local storage cache
