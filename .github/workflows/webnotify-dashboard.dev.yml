@@ -8,7 +8,7 @@ on:
     paths:
       - ".github/**"
       - "libs/**"
-      - "apps/web-notify-dashboard/**"
+      - "apps/webnotify-dashboard/**"
 
 jobs:
   unit-test:
