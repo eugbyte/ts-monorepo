@@ -4,13 +4,14 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: reference to a commit to deploy
+        required: true
   push:
     branches:
-      - chore/deploy-2
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - chore/deploy-2
+      - master
 
 jobs:
   build_and_deploy_job:
