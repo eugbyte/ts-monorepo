@@ -1,5 +1,5 @@
 {
-  "name": "@eugbyte-monorepo/web-notify-dashboard",
+  "name": "@eugbyte-monorepo/webnotify-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
