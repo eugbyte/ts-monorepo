@@ -26,13 +26,18 @@ jobs:
         with:
           submodules: true
       - name: Print dir
-        run: ls
+        run: ls      
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
       - name: Install node modules
-        run: npm ci # still need to run clean install for the sym link for the monorepo
+        # still need to run clean install for the sym link for the monorepo, using static-web-apps-deploy@v1 alone does not work
+        run: |
+          npm ci 
+          cd node_modules/@eugbyte-monorepo && ls
+      - name: Print stage
+        run: echo $REACT_APP_STAGE
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
