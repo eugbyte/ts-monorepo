@@ -26,6 +26,7 @@ Monorepo in Typescript, using npm workspaces
 ```
 npm --workspace=@eugbyte-monorepo/web-push-dashboard run test
 ```
+- npm workspace is only available from npm -v > @16. Enforce the version via the `engine` field of `package.json`
 - Refer to [this guide](https://github.com/NiGhTTraX/ts-monorepo#integrations) for resolving path resolutions outside a workspace root directory.
     * For CRA, need to [configure babel loader to recognise such paths](https://frontend-digest.com/using-create-react-app-in-a-monorepo-a4e6f25be7aa)
 - Remember to do `npm i` to symlink the workspaces each time you create a new workspace.
@@ -48,6 +49,4 @@ module.exports = {
   presets: [require("../../tailwind.base.config.js")]   // inherit the base tailwind config
 }
 ```
-
-## Gotchas
-- npm workspace is only available from npm -v > @16. Enforce the version via the `engine` field of `package.json`
+- For the respective repo CI to run only when the corresponding repo's files change, use Github's Action [`paths field`](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore) to configure a workflow to run based on what file paths are changed
