@@ -7,10 +7,10 @@ Monorepo in Typescript, using npm workspaces
 --- 
 
 ## List of Apps
-| Apps                                                     | Description                                                                                                                        |
-| :------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-| [web-push-dashboard](apps/webnotify-dashboard/README.md) | ui to showcase Web Push SaaS. Web Push SaaS allows you to easily send web push notifications to users with just a single API call. |
-|                                                          |                                                                                                                                    |
+| Apps                                                                  | Description                                                                                                                        |
+| :-------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| [web-notification-SaaS-dashboard](apps/webnotify-dashboard/README.md) | ui to showcase Web Notification SaaS. Web Notification SaaS allows you to easily send web push notifications to users with just a single API call. |
+|                                                                       |                                                                                                                                    |
 
 ## List of Libs
 | Libraries                                          | Description                                        |

@@ -37,11 +37,10 @@ if (perm === "granted") {
 curl --location --request POST 'http://localhost:7071/api/notifications' \
 --header 'Content-Type: application/json' \
 --header 'Connection: close' \
---header 'Notify-Secret-Name: <your_secret_name>' \
---header 'Notify-Secret-Value: <your_secret_value>' \
+--header 'x-functions-key: <your_API_Key>' \
 --data-raw '{
-    "userID": "abc@m.com",
-    "company": "fakepanda",
+    "userID": "<userID>",
+    "company": "<company_name>",
     "notification": {
         "title": "My title",
         "body": "My message",
