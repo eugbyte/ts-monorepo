@@ -2,7 +2,7 @@
 Front-end dashboard for web push notification SaaS. Using monorepo architecture.
 
 ## Demo
-Try out the demo  [here](https://nice-ground-07440cd00.1.azurestaticapps.net/)
+Try out the demo [here](https://nice-ground-07440cd00.1.azurestaticapps.net/)
 
 ## Dev
 ```
