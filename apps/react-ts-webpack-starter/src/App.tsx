@@ -3,9 +3,8 @@ import { Button } from "@eugbyte-monorepo/components";
 
 function App() {
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
+    <div className="h-screen bg-slate-800 flex flex-col justify-center items-center">
       <Banner />
-      <br />
       <Button>Click me</Button>
     </div>
   );
