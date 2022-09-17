@@ -28,7 +28,7 @@ jobs:
       - name: Install node modules
         run: npm ci
       - name: Run unit tests
-        run: npm --workspace=@eugbyte-monorepo/react-ts-webpack-starter run test:ci
+        run: npm --workspace=@eugbyte-monorepo/react-ts-webpack-starter run test
         env:
           CI: true 
       - name: Run lint

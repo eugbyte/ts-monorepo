@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="h-screen flex flex-col justify-center items-center">
       <Banner />
-      <br/>
+      <br />
       <Button>Click me</Button>
     </div>
   );
