@@ -1,0 +1,35 @@
+name: react-ts-webpack-starter
+concurrency:
+  group: react-ts-webpack-starter
+  cancel-in-progress: true
+
+on:
+  push:
+    paths:
+      - ".github/**"
+      - "libs/**"
+      - "apps/react-ts-webpack-starter/**"
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v3
+      - name: Print dir
+        run: ls
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install node modules
+        run: npm ci
+      - name: Run unit tests
+        run: npm --workspace=@eugbyte-monorepo/react-ts-webpack-starter run test:ci
+        env:
+          CI: true 
+      - name: Run lint
+        run: npm --workspace=@eugbyte-monorepo/react-ts-webpack-starter run lint:fix 
