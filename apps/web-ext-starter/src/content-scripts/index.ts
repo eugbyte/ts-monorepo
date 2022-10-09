@@ -1,7 +1,8 @@
 // IIFE
 (() => {
   // Dependency injection
-  console.log("content script");
+  console.log("in content script");
+  document.body.style.border = "5px solid red";
 })();
 
 export {};

@@ -1,7 +1,7 @@
 // IIFE
 (() => {
   // Dependency injection
-  console.log("background script");
+  console.log("in background script");
 })();
 
 export {};
