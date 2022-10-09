@@ -26,5 +26,6 @@ module.exports = {
       'serviceWorkerRegistration.ts', 
       'service-worker.ts',
       'jest.config.js',
+      'build'
     ]
 };
