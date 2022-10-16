@@ -1,1 +1,1 @@
-export { ContextMenuFactory } from "./context-menu";
+export { createContextMenu } from "./context-menu";

@@ -1,0 +1,14 @@
+{
+  "name": "@eugbyte-monorepo/web-ext",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webextension-polyfill-ts": "^0.26.0"
+  }
+}

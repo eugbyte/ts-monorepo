@@ -1,12 +1,6 @@
-import { ContextMenuFactory } from "./context-menu";
+import { createContextMenu } from "./context-menu";
 
 // IIFE
 (() => {
-  console.log("in background script");
-  const menuFactory = new ContextMenuFactory(
-    "legal-cite-ext",
-    "Copy with source",
-    ["page"]
-  );
-  menuFactory.create().onClick((info, tab) => {});
+  createContextMenu();
 })();
