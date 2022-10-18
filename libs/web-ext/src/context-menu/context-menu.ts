@@ -1,25 +1,33 @@
 import { browser, Tabs, Menus } from "webextension-polyfill-ts";
 
-type callback = (i: Menus.OnClickData, t: Tabs.Tab | undefined) => void;
+type Callback = (i: Menus.OnClickData, t: Tabs.Tab | undefined) => void;
 
-export class ContextMenuFactory {
-  constructor(
-    public id: string,
-    public title: string,
-    public contexts: Menus.ContextType[]
-  ) {}
+export interface Options {
+  id: string;
+  title: string;
+  contexts: Menus.ContextType[];
+}
 
-  create() {
-    const { id, title, contexts } = this;
+export class ContextMenuBuilder {
+  id = "";
+  title = "";
+  contexts: Menus.ContextType[] = [];
+
+  create(options: Options) {
+    const { id, title, contexts } = options;
+    this.id = id;
+    this.title = title;
+    this.contexts = [...contexts];
+
     browser.contextMenus.create({
       id,
-      title: browser.i18n.getMessage(title),
+      title,
       contexts: [...contexts],
     });
     return this;
   }
 
-  onClick(cb: callback) {
+  onClick(cb: Callback) {
     const { id } = this;
     browser.contextMenus.onClicked.addListener((info, tab) => {
       switch (info.menuItemId) {

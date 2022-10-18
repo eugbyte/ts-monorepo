@@ -1,10 +1,13 @@
-import { ContextMenuFactory } from "@eugbyte-monorepo/web-ext";
+import { ContextMenuBuilder, Options } from "@eugbyte-monorepo/web-ext";
 
 export const createContextMenu = () => {
-  const menuFactory = new ContextMenuFactory(
-    "legal-cite-ext",
-    "Copy with source",
-    ["page"]
-  );
-  menuFactory.create().onClick((_info, _tab) => {});
+  const options: Options = {
+    id: "legal-cite-ext",
+    title: "Copy with source",
+    contexts: ["page"],
+  };
+  const menuBuilder = new ContextMenuBuilder();
+  menuBuilder
+    .create(options)
+    .onClick((info, tab) => console.log({ info, tab }));
 };
