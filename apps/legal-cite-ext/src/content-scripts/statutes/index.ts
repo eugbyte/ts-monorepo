@@ -1,6 +1,14 @@
 import { browser } from "webextension-polyfill-ts";
+import { Action } from "~/models/Action";
 import { writeHTML } from "./clipboard";
 import { getCitation } from "./get-citation";
+
+/**
+ * User flow:
+ * 1. User right clicks, triggerring context menu event in the content script
+ * 2. Context menu is displayed
+ * 2. User left clicks on a context menu item, trigger context menu event in the background script
+ */
 
 // IIFE
 (async () => {
@@ -11,8 +19,12 @@ import { getCitation } from "./get-citation";
     target[0] = event.target as HTMLElement;
   });
 
-  browser.runtime.onMessage.addListener(async (msg: string) => {
-    if (target[0] != null && msg === "legal-cite-ext") {
+  browser.runtime.onMessage.addListener(async (action: Action) => {
+    if (
+      target[0] != null &&
+      action.id === "legal-cite-ext" &&
+      action.type === "right-click"
+    ) {
       const citation = getCitation(target[0]);
       const content = `<span style="color:red"><i>${citation}</i>`;
       await writeHTML(content);

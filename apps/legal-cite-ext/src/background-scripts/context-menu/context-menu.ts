@@ -1,4 +1,5 @@
 import { browser } from "webextension-polyfill-ts";
+import { Action } from "~/models/Action";
 
 export const createContextMenu = (tabId: number) => {
   const options = {
@@ -16,7 +17,10 @@ export const createContextMenu = (tabId: number) => {
   browser.contextMenus.onClicked.addListener((info) => {
     switch (info.menuItemId) {
       case options.id:
-        browser.tabs.sendMessage(tabId, "legal-cite-ext");
+        browser.tabs.sendMessage(
+          tabId,
+          new Action("legal-cite-ext", "right-click")
+        );
         break;
       default:
         break;
