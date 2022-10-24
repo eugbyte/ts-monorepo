@@ -1,6 +1,8 @@
 import { createContextMenu } from "./context-menu";
+import { getActiveTabID } from "./tabs";
 
 // IIFE
-(() => {
-  createContextMenu();
+(async () => {
+  const tabID = await getActiveTabID();
+  createContextMenu(tabID);
 })();
