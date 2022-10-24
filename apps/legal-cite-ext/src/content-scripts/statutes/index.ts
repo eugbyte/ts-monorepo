@@ -25,9 +25,13 @@ import { getCitation } from "./get-citation";
       action.id === "legal-cite-ext" &&
       action.type === "right-click"
     ) {
-      const citation = getCitation(target[0]);
-      const content = `<span style="color:red"><i>${citation}</i>`;
-      await writeHTML(content);
+      try {
+        const citation = getCitation(target[0]);
+        const content = `<span style="color:red"><i>${citation}</i>`;
+        await writeHTML(content);
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
 })();
