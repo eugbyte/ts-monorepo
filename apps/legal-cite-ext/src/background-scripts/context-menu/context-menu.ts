@@ -5,16 +5,17 @@ export const createContextMenu = (tabId: number) => {
   const options = {
     id: "legal-cite-ext",
     title: "Copy with source",
-    contexts: ["page"],
+    contexts: ["selection"],
   };
 
   browser.contextMenus.create({
     id: options.id,
     title: options.title,
-    contexts: ["page"],
+    contexts: ["selection"],
   });
 
   browser.contextMenus.onClicked.addListener((info) => {
+    console.log("context menu clicked");
     switch (info.menuItemId) {
       case options.id:
         browser.tabs.sendMessage(

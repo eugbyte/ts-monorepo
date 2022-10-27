@@ -14,8 +14,8 @@ module.exports = {
     'browser-polyfill': '../../node_modules/webextension-polyfill/dist/browser-polyfill.js',
     // background script
     'background-scripts/index': './src/background-scripts/index.ts',
-    // content-script - sso.agc.gov.sg 
-    'content-scripts/index': './src/content-scripts/index.ts',
+    // content-script - statutes 
+    'content-scripts/statutes/index': './src/content-scripts/statutes/index.ts',
   },
   output: {
     path: __dirname + "/build/",

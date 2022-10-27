@@ -25,7 +25,6 @@ function backtrack(
   const isComplete = provisionDict.get(numDot) !== "";
   if (isComplete) {
     console.log({ isComplete });
-    console.log(provisionDict.get(numDot));
     return;
   }
 
