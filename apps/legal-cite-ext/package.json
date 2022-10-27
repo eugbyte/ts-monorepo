@@ -53,6 +53,7 @@
     "webpack-dev-server": "^4.11.0"
   },
   "dependencies": {
+    "copy-to-clipboard": "^3.3.2",
     "lodash.startcase": "^4.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
