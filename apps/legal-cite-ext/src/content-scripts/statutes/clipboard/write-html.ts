@@ -6,7 +6,7 @@ export const writeHTML = async (content: string) => {
   // ClipboardItem is not supported in firefox
   // execCommand is not supported in chrome
   if ("ClipboardItem" in window) {
-    const item = new window.ClipboardItem({ [type]: blob });
+    const item = new ClipboardItem({ [type]: blob });
     await navigator.clipboard.write([item]);
   } else {
     copy(content, {
