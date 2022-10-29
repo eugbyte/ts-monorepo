@@ -28,7 +28,10 @@ import { getCitation } from "./get-citation";
       try {
         const citation = getCitation(target[0]);
         const text: string = document.getSelection()?.toString() || "";
-        const content = `${text}\n<span style="color:red"><i>${citation}</i>`;
+        const content = `
+          <p>${text}</p>
+          <span style="color:red">${citation}
+        `;
         await writeHTML(content);
       } catch (error) {
         console.log(error);
