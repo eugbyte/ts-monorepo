@@ -1,6 +1,6 @@
 import { browser } from "webextension-polyfill-ts";
 import { Action } from "~/models/Action";
-import { writeHTML } from "./clipboard";
+import { write } from "./clipboard";
 import { getCitation } from "./get-citation";
 
 /**
@@ -28,11 +28,11 @@ import { getCitation } from "./get-citation";
       try {
         const citation = getCitation(target[0]);
         const text: string = document.getSelection()?.toString() || "";
-        const content = `
+        const htmlContent = `
           <p>${text}</p>
           <span style="color:red">${citation}
         `;
-        await writeHTML(content);
+        await write(htmlContent, `${text}\n${citation}`);
       } catch (error) {
         console.log(error);
       }

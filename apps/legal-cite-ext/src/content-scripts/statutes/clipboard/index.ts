@@ -1,1 +1,1 @@
-export { writeHTML } from "./write-html";
+export { write } from "./write";
