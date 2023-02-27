@@ -11,5 +11,5 @@ npm i
 // to fix crlf issues between platforms
 npm run lint:fix
 // run the app
-npm --workspace="@eugbyte-monorepo/web-notify-dashboard" run demo
+npm --workspace="@eugbyte-monorepo/web-notify-dashboard" run demo e33e
 ```
