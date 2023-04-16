@@ -24,7 +24,7 @@ Monorepo in Typescript, using npm workspaces
 ## Development Guide
 - Execute commands specific to a workspace with the `--workspace` flag option, [see here](https://docs.npmjs.com/cli/v7/using-npm/workspaces#running-commands-in-the-context-of-workspaces)
 ```
-npm --workspace=@eugbyte-monorepo/web-push-dashboard run test
+npm --workspace=@eugbyte-monorepo/webnotify-dashboard run test
 ```
 - npm workspace is only available from npm -v > @16. Enforce the version via the `engine` field of `package.json`
 - Refer to [this guide](https://github.com/NiGhTTraX/ts-monorepo#integrations) for resolving path resolutions outside a workspace root directory.
