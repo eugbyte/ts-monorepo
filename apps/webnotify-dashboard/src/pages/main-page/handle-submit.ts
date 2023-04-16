@@ -1,4 +1,3 @@
-import { MessageInfo } from "@eugbyte-monorepo/service-workers";
 import { sleep } from "@eugbyte-monorepo/utils";
 import { UseFormReturn } from "react-hook-form";
 import { Notify } from "~/models/Notify";
@@ -42,7 +41,7 @@ export const handleSubmit = async ({
     await sleep(sleepDuration);
 
     try {
-      const info: MessageInfo = {
+      const info = {
         userID,
         company,
         notification: {
